@@ -1,0 +1,104 @@
+plugins {
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+	id 'net.octyl.level-headered' version "${octyl_headered_version}"
+	id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	// ModMenu
+	maven {
+		name = "Terraformers"
+		url = "https://maven.terraformersmc.com/"
+	}
+	// YACL
+	maven {
+        name 'Xander Maven'
+        url 'https://maven.isxander.dev/releases'
+    }
+	// ChatImprover
+	maven {
+        url = uri("https://maven.pkg.github.com/Ayoree/ChatImprover")
+        credentials {
+            username = 'Ayoree'
+            password = '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'
+        }
+   }
+}
+
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// `AutoService` annotation
+	compileOnly 'com.google.auto.service:auto-service:1.1.1'
+	annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
+
+	// Fabric API
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	
+	// Chat improver
+	modImplementation "org.ayoree:chatimprover:${chat_improver_version}"
+
+	// Modmenu
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modLocalRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	// YACL
+	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": inputs.properties.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	inputs.property "archivesName", project.base.archivesName
+
+	from("LICENSE") {
+		rename { "${it}_${inputs.properties.archivesName}"}
+	}
+}
+
+levelHeadered {
+    headerTemplate(rootProject.file("HEADER.txt"))
+    
+    sourceMatchPatterns {
+        //exclude('org/ayoree/chatimprover/somefolder/')
+    }
+}
+
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			artifactId = project.archives_base_name
+			from components.java
+		}
+	}
+	repositories {
+	}
+}

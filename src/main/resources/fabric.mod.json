@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "chatimprove_dexland",
+	"version": "${version}",
+	"name": "ChatImprove dexland",
+	"description": "Аддон для мода `ChatImprover` (https://github.com/Ayoree/ChatImprover), улучшающий получаемые сообщения в чате на соответствующем сервере",
+	"authors": [
+		"Ayoree"
+	],
+	"contact": {
+		"homepage": "https://github.com/Ayoree/ChatImprove-dexland"
+	},
+	"license": "AGPL-3.0",
+	"icon": "assets/chatimprove_dexland/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"org.ayoree.chatimprove.dexland.ChatImprove_dexland"
+		],
+		"modmenu": [
+			"org.ayoree.chatimprove.dexland.ModMenuIntegration"
+		]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.10",
+		"java": ">=21",
+		"fabric-api": "*",
+		"chatimprover": "*",
+		"modmenu": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"parent": "chatimprover"
+		}
+	}
+}
