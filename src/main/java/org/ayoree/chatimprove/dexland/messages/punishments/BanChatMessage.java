@@ -44,8 +44,8 @@ public class BanChatMessage extends PunishChatMessage {
     public BanChatMessage(Text message) {
         super(message);
         final List<Text> siblings = m_message.getSiblings();
-        m_receiverNick = siblings.get(s_receiverIndex).getString().trim();
-        m_senderNick = siblings.get(s_senderIndex).getString().trim();
+        setReceiverNick(siblings.get(s_receiverIndex).getString().trim());
+        setSenderNick(siblings.get(s_senderIndex).getString().trim());
         m_isIp = siblings.get(3).getString().startsWith("был забанен по айпи ");
     }
 
@@ -72,7 +72,7 @@ public class BanChatMessage extends PunishChatMessage {
     @Override
     public Text getChangedMessage() {
         String banStr = Config.getInst().incorrectBanMsg;
-        banStr = banStr.replace("{NICKNAME}", m_senderNick).replace("{RECEIVER}", m_receiverNick);
+        banStr = banStr.replace("{NICKNAME}", getSenderNick()).replace("{RECEIVER}", getReceiverNick());
 
         MutableText newMsg = m_message.copy();
         final List<Text> siblings = newMsg.getSiblings();
@@ -80,12 +80,12 @@ public class BanChatMessage extends PunishChatMessage {
             .withClickEvent(new ClickEvent.SuggestCommand(banStr))
             .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
         final Style receiverStyle = siblings.get(s_senderIndex).getStyle()
-            .withClickEvent(new ClickEvent.SuggestCommand("/unban " + m_receiverNick))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы разбанить §f§n" + m_receiverNick)));
+            .withClickEvent(new ClickEvent.SuggestCommand("/unban " + getReceiverNick()))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы разбанить §f§n" + getReceiverNick())));
         
         siblings.set(s_receiverIndex, siblings.get(s_receiverIndex).copy().setStyle(receiverStyle));
         siblings.set(s_senderIndex, siblings.get(s_senderIndex).copy().setStyle(senderStyle));
 
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

@@ -42,7 +42,7 @@ public abstract class AnyPunishlistChatMessage extends AnyPunishChatMessage {
                 break;
             }
         }
-        m_receiverNick = siblings.get(s_receiverIndex).getString().trim();
-        m_senderNick = siblings.get(s_senderIndex).getString().trim();
+        setReceiverNick(siblings.get(s_receiverIndex).getString().trim());
+        setSenderNick(siblings.get(s_senderIndex).getString().trim());
     }
 }

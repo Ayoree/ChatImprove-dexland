@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprover.api.ChatMessage;
+import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
@@ -35,15 +36,14 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class CoreProtectMessage extends ChatMessage {
+public class CoreProtectMessage extends ChatMessageWithSender {
     protected static final int s_nickIndex = 2;
-    protected final String m_nick;
 
     public CoreProtectMessage(Text message) {
         super(message);
         final List<Text> siblings = message.getSiblings();
         final String tempStr = siblings.get(s_nickIndex).getString();
-        m_nick = tempStr.substring(0, tempStr.indexOf(" ") - 2);
+        setSenderNick(tempStr.substring(0, tempStr.indexOf(" ") - 2));
     }
 
     @AutoService(Provider.class)
@@ -64,7 +64,7 @@ public class CoreProtectMessage extends ChatMessage {
     @Override
     public Text getChangedMessage() {
         String banStr = Config.getInst().coreProtectCommand;
-        banStr = banStr.replace("{NICKNAME}", m_nick);
+        banStr = banStr.replace("{NICKNAME}", getSenderNick());
 
         MutableText newMsg = m_message.copy();
         final List<Text> siblings = newMsg.getSiblings();
@@ -73,6 +73,6 @@ public class CoreProtectMessage extends ChatMessage {
             .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
         siblings.set(s_nickIndex, siblings.get(s_nickIndex).copy().setStyle(nickStyle));
 
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

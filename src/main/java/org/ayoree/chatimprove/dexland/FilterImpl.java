@@ -156,7 +156,7 @@ public class FilterImpl extends Filter {
                     return false;
                 List<Text> siblings = text.getSiblings();
                 return (siblings.size() == 5 &&
-                    siblings.get(0).getString().equals("|АнтиЧит") &&
+                    siblings.get(0).getString().equals("АнтиЧит") &&
                     siblings.get(1).getString().equals(" ▸ ") &&
                     siblings.get(2).getString().equals("Игрок ") &&
                     siblings.get(4).getString().equals(" кикнут по подозрению в использовании читов.")

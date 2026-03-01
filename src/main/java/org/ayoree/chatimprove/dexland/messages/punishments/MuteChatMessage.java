@@ -43,8 +43,8 @@ public class MuteChatMessage extends PunishChatMessage {
     public MuteChatMessage(Text message) {
         super(message);
         final List<Text> siblings = m_message.getSiblings();
-        m_receiverNick = siblings.get(s_receiverIndex).getString().trim();
-        m_senderNick = siblings.get(s_senderIndex).getString().trim();
+        setReceiverNick(siblings.get(s_receiverIndex).getString().trim());
+        setSenderNick(siblings.get(s_senderIndex).getString().trim());
         m_isIp = siblings.get(3).getString().startsWith("был замучен по айпи ");
     }
 
@@ -71,7 +71,7 @@ public class MuteChatMessage extends PunishChatMessage {
     @Override
     public Text getChangedMessage() {
         String banStr = Config.getInst().incorrectMuteMsg;
-        banStr = banStr.replace("{NICKNAME}", m_senderNick).replace("{RECEIVER}", m_receiverNick);
+        banStr = banStr.replace("{NICKNAME}", getSenderNick()).replace("{RECEIVER}", getReceiverNick());
 
         MutableText newMsg = m_message.copy();
         final List<Text> siblings = newMsg.getSiblings();
@@ -79,12 +79,12 @@ public class MuteChatMessage extends PunishChatMessage {
             .withClickEvent(new ClickEvent.SuggestCommand(banStr))
             .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
         final Style receiverStyle = siblings.get(s_receiverIndex).getStyle()
-            .withClickEvent(new ClickEvent.SuggestCommand("/unmute " + m_receiverNick))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы снять мут с §f§n" + m_receiverNick)));
+            .withClickEvent(new ClickEvent.SuggestCommand("/unmute " + getReceiverNick()))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы снять мут с §f§n" + getReceiverNick())));
         
         siblings.set(s_receiverIndex, siblings.get(s_receiverIndex).copy().setStyle(receiverStyle));
         siblings.set(s_senderIndex, siblings.get(s_senderIndex).copy().setStyle(senderStyle));
 
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

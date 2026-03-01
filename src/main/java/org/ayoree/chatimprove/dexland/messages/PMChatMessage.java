@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprover.api.ChatMessage;
+import org.ayoree.chatimprover.api.ChatMessageWithReceiverAndSender;
 
 import com.google.auto.service.AutoService;
 
@@ -34,19 +35,17 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 // /msg messages
-public class PMChatMessage extends ChatMessage {
-    protected final String m_senderNick;
-    protected final String m_receiverNick;
+public class PMChatMessage extends ChatMessageWithReceiverAndSender {
     protected final Text m_textPart;
     static final int startNickIndex = 14;
 
      public PMChatMessage(Text message) {
         super(message);
         
-        m_senderNick = getMessageStr().substring(startNickIndex, getMessageStr().indexOf(" -> ", 10));
-        int receiverStartIndex = startNickIndex + (m_senderNick.length()) + 4;
-        m_receiverNick = getMessageStr().substring(receiverStartIndex, getMessageStr().indexOf("] ", receiverStartIndex));
-        m_textPart = Text.of(m_message.getString().substring(receiverStartIndex + m_receiverNick.length() + 2));
+        setSenderNick(getMessageStr().substring(startNickIndex, getMessageStr().indexOf(" -> ", 10)));
+        int receiverStartIndex = startNickIndex + (getSenderNick().length()) + 4;
+        setReceiverNick(getMessageStr().substring(receiverStartIndex, getMessageStr().indexOf("] ", receiverStartIndex)));
+        m_textPart = Text.of(m_message.getString().substring(receiverStartIndex + getReceiverNick().length() + 2));
     }
 
     @AutoService(Provider.class)
@@ -67,17 +66,17 @@ public class PMChatMessage extends ChatMessage {
     public Text getChangedMessage() {
         MutableText newMsg = Text.empty();
         final Style senderStyle = Style.EMPTY
-            .withClickEvent(new ClickEvent.SuggestCommand("/m " + m_senderNick))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + m_senderNick)));
+            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick()))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
         final Style receiverStyle = Style.EMPTY
-            .withClickEvent(new ClickEvent.SuggestCommand("/m " + m_receiverNick))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + m_receiverNick)));
+            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getReceiverNick()))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getReceiverNick())));
         newMsg.append(Text.of("§7[SS] §f[").copy().setStyle(Style.EMPTY));
-        newMsg.append(Text.of("§a" + m_senderNick).copy().setStyle(senderStyle));
+        newMsg.append(Text.of("§a" + getSenderNick()).copy().setStyle(senderStyle));
         newMsg.append(Text.of("§7 -> ").copy().setStyle(Style.EMPTY));
-        newMsg.append(Text.of("§a" + m_receiverNick).copy().setStyle(receiverStyle));
+        newMsg.append(Text.of("§a" + getReceiverNick()).copy().setStyle(receiverStyle));
         newMsg.append(Text.of("§f]§r ").copy().setStyle(Style.EMPTY));
         newMsg.append(m_textPart);
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

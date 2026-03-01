@@ -15,15 +15,11 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	// ModMenu
-	maven {
-		name = "Terraformers"
-		url = "https://maven.terraformersmc.com/"
-	}
+	maven { url = "https://maven.terraformersmc.com/" }
+	// OWO lib
+	maven { url 'https://maven.wispforest.io' }
 	// YACL
-	maven {
-        name 'Xander Maven'
-        url 'https://maven.isxander.dev/releases'
-    }
+	maven { url 'https://maven.isxander.dev/releases' }
 	// ChatImprover
 	maven {
         url = uri("https://maven.pkg.github.com/Ayoree/ChatImprover")
@@ -46,6 +42,10 @@ dependencies {
 
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	
+	// OWO Lib
+	modImplementation "io.wispforest:owo-lib:${project.owo_version}"
+    annotationProcessor "io.wispforest:owo-lib:${project.owo_version}"
 	
 	// Chat improver
 	modImplementation "org.ayoree:chatimprover:${chat_improver_version}"

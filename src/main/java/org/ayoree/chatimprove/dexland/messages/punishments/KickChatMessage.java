@@ -42,8 +42,8 @@ public class KickChatMessage extends PunishChatMessage {
     public KickChatMessage(Text message) {
         super(message);
         final List<Text> siblings = message.getSiblings();
-        m_receiverNick = siblings.get(s_receiverIndex).getString().trim();
-        m_senderNick = siblings.get(s_senderIndex).getString().trim();
+        setReceiverNick(siblings.get(s_receiverIndex).getString().trim());
+        setSenderNick(siblings.get(s_senderIndex).getString().trim());
 
         String reason = "";
         for (int i = 6; i < siblings.size() - 1; ++i)
@@ -74,7 +74,7 @@ public class KickChatMessage extends PunishChatMessage {
     @Override
     public Text getChangedMessage() {
         String banStr = Config.getInst().incorrectKickMsg;
-        banStr = banStr.replace("{NICKNAME}", m_senderNick).replace("{RECEIVER}", m_receiverNick);
+        banStr = banStr.replace("{NICKNAME}", getSenderNick()).replace("{RECEIVER}", getReceiverNick());
 
         MutableText newMsg = m_message.copy();
         final List<Text> siblings = newMsg.getSiblings();
@@ -82,12 +82,12 @@ public class KickChatMessage extends PunishChatMessage {
             .withClickEvent(new ClickEvent.SuggestCommand(banStr))
             .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
         final Style receiverStyle = siblings.get(s_receiverIndex).getStyle()
-            .withClickEvent(new ClickEvent.SuggestCommand("!" + m_senderNick + " /unkick " + m_receiverNick))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы попросить §f§n/unkick " + m_receiverNick)));
+            .withClickEvent(new ClickEvent.SuggestCommand("!" + getSenderNick() + " /unkick " + getReceiverNick()))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы попросить §f§n/unkick " + getReceiverNick())));
         
         siblings.set(s_receiverIndex, siblings.get(s_receiverIndex).copy().setStyle(receiverStyle));
         siblings.set(s_senderIndex, siblings.get(s_senderIndex).copy().setStyle(senderStyle));
 
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

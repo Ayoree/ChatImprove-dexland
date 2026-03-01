@@ -25,6 +25,7 @@ import java.util.function.Predicate;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprover.api.ChatMessage;
+import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
@@ -34,13 +35,11 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class BroadcastChatMessage extends ChatMessage {
-    final String m_nick;
-
+public class BroadcastChatMessage extends ChatMessageWithSender {
     public BroadcastChatMessage(Text message) {
         super(message);
         final List<Text> siblings = m_message.getSiblings();
-        m_nick = siblings.get(siblings.size() - 2).getString();
+        setSenderNick(siblings.get(siblings.size() - 2).getString());
     }
 
     @AutoService(Provider.class)
@@ -69,13 +68,13 @@ public class BroadcastChatMessage extends ChatMessage {
     public Text getChangedMessage() {
         MutableText newMsg = m_message.copy();
         final Style senderStyle = Style.EMPTY
-            .withClickEvent(new ClickEvent.SuggestCommand("/m " + m_nick + " "))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + m_nick)));
+            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
 
         final List<Text> siblings = newMsg.getSiblings();
         final int index = siblings.size() - 2;
         siblings.set(index, siblings.get(index).copy().setStyle(senderStyle));
 
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

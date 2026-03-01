@@ -64,7 +64,7 @@ public class KicklistChatMessage extends PunishlistChatMessage {
     @Override
     public Text getChangedMessage() {
         String banStr = Config.getInst().incorrectKickMsg;
-        banStr = banStr.replace("{NICKNAME}", m_senderNick).replace("{RECEIVER}", m_receiverNick);
+        banStr = banStr.replace("{NICKNAME}", getSenderNick()).replace("{RECEIVER}", getReceiverNick());
         if (Config.getInst().isAutoServerSuffix) {
             banStr = banStr.concat(" server:" + m_server);
         }
@@ -75,12 +75,12 @@ public class KicklistChatMessage extends PunishlistChatMessage {
             .withClickEvent(new ClickEvent.SuggestCommand(banStr))
             .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
         final Style receiverStyle = siblings.get(s_receiverIndex).getStyle()
-            .withClickEvent(new ClickEvent.SuggestCommand("/hist " + m_receiverNick))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы посмотреть историю §f§n" + m_receiverNick)));
+            .withClickEvent(new ClickEvent.SuggestCommand("/hist " + getReceiverNick()))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы посмотреть историю §f§n" + getReceiverNick())));
         
         siblings.set(s_receiverIndex, siblings.get(s_receiverIndex).copy().setStyle(receiverStyle));
         siblings.set(s_senderIndex, siblings.get(s_senderIndex).copy().setStyle(senderStyle));
 
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

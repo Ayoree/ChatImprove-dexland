@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
+import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
@@ -36,8 +37,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 // Global chat / Local chat
-public class CommonChatMessage extends ChatMessage {
-    protected final String m_sender;
+public class CommonChatMessage extends ChatMessageWithSender {
     protected final String m_textPart;
     private final boolean m_isGlobal;
 
@@ -50,7 +50,7 @@ public class CommonChatMessage extends ChatMessage {
         final ClickEvent.SuggestCommand suggestCommand = (ClickEvent.SuggestCommand) clickEvent;
         final String command = suggestCommand.command();
         m_isGlobal = getMessageStr().startsWith("[ɢ]");
-        m_sender = command.substring(5, command.length() - 1); // /msg ник
+        setSenderNick(command.substring(5, command.length() - 1)); // /msg ник
         m_textPart = siblings.get(1).getString();
     }
 
@@ -76,7 +76,7 @@ public class CommonChatMessage extends ChatMessage {
     public Text getChangedMessage() {
         MutableText newMsg = Text.empty();
         final Text donatePart = getRank();
-        final Text nickPart = Text.of("§f" + m_sender + " ");
+        final Text nickPart = Text.of("§f" + getSenderNick() + " ");
         final List<Text> siblings = m_message.getSiblings();
         final Style msgStyle = Style.EMPTY
             .withHoverEvent(new HoverEvent.ShowText(buildHoverText()))
@@ -89,7 +89,7 @@ public class CommonChatMessage extends ChatMessage {
         for (int i = 1; i < siblings.size(); ++i) {
             newMsg.append(siblings.get(i));
         }
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 
     private Text getRank() {

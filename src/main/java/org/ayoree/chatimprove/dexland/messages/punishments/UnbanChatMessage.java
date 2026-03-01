@@ -45,8 +45,8 @@ public class UnbanChatMessage extends UnPunishChatMessage {
         final List<Text> siblings = message.getSiblings();
         m_isHidden = siblings.size() == 6;
         final int start = m_isHidden ? 1 : 0;
-        m_senderNick = siblings.get(start + s_senderIndex).getString().trim();
-        m_receiverNick = siblings.get(start + s_receiverIndex).getString().trim();
+        setSenderNick(siblings.get(start + s_senderIndex).getString().trim());
+        setReceiverNick(siblings.get(start + s_receiverIndex).getString().trim());
     }
 
     @AutoService(Provider.class)
@@ -74,7 +74,7 @@ public class UnbanChatMessage extends UnPunishChatMessage {
     @Override
     public Text getChangedMessage() {
         String banStr = Config.getInst().incorrectUnbanMsg;
-        banStr = banStr.replace("{NICKNAME}", m_senderNick).replace("{RECEIVER}", m_receiverNick);
+        banStr = banStr.replace("{NICKNAME}", getSenderNick()).replace("{RECEIVER}", getReceiverNick());
 
         MutableText newMsg = m_message.copy();
         final List<Text> siblings = newMsg.getSiblings();
@@ -83,12 +83,12 @@ public class UnbanChatMessage extends UnPunishChatMessage {
             .withClickEvent(new ClickEvent.SuggestCommand(banStr))
             .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
         final Style receiverStyle = siblings.get(start + s_receiverIndex).getStyle()
-            .withClickEvent(new ClickEvent.SuggestCommand("/ban " + m_receiverNick))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы перебанить §f§n" + m_receiverNick)));
+            .withClickEvent(new ClickEvent.SuggestCommand("/ban " + getReceiverNick()))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы перебанить §f§n" + getReceiverNick())));
         
         siblings.set(start + s_senderIndex, siblings.get(start + s_senderIndex).copy().setStyle(senderStyle));
         siblings.set(start + s_receiverIndex, siblings.get(start + s_receiverIndex).copy().setStyle(receiverStyle));
 
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

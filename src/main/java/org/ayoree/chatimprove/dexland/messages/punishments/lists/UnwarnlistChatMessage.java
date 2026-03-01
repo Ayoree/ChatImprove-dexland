@@ -62,8 +62,8 @@ public class UnwarnlistChatMessage extends UnPunishlistChatMessage {
     @Override
     public Text getChangedMessage() {
         String banStr = Config.getInst().incorrectUnwarnMsg;
-        String rewarnStr = "/warn " + m_receiverNick;
-        banStr = banStr.replace("{NICKNAME}", m_senderNick).replace("{RECEIVER}", m_receiverNick);
+        String rewarnStr = "/warn " + getReceiverNick();
+        banStr = banStr.replace("{NICKNAME}", getSenderNick()).replace("{RECEIVER}", getReceiverNick());
         if (Config.getInst().isAutoServerSuffix) {
             banStr = banStr.concat(" server:" + m_server);
             rewarnStr = rewarnStr.concat(" server:" + m_server);
@@ -76,11 +76,11 @@ public class UnwarnlistChatMessage extends UnPunishlistChatMessage {
             .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
         final Style receiverStyle = siblings.get(s_receiverIndex).getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand(rewarnStr))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы переварнить §f§n" + m_receiverNick)));
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы переварнить §f§n" + getReceiverNick())));
         
         siblings.set(s_receiverIndex, siblings.get(s_receiverIndex).copy().setStyle(receiverStyle));
         siblings.set(s_senderIndex, siblings.get(s_senderIndex).copy().setStyle(senderStyle));
 
-        return newMsg;
+        return addExtraStuff(newMsg);
     }
 }

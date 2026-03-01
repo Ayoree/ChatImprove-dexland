@@ -78,11 +78,6 @@ public class ReasonChatMessage extends ChatMessage {
         }
     }
 
-    @Override
-    public Text getChangedMessage() {
-        return m_message;
-    }
-
     public String getReasonStr() {
         return m_reason;
     }

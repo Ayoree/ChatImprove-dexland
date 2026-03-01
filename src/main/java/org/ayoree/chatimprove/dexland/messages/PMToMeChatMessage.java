@@ -25,24 +25,23 @@ import java.util.function.Predicate;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprover.api.ChatMessage;
+import org.ayoree.chatimprover.api.ChatMessageWithReceiverAndSender;
 import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
 import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class MeChatMessage extends ChatMessageWithSender {
-    static protected final int s_nickIndex = 1;
-
-    public MeChatMessage(Text message) {
+// /msg messages
+public class PMToMeChatMessage extends ChatMessageWithSender {
+     public PMToMeChatMessage(Text message) {
         super(message);
-        final List<Text> siblings = m_message.getSiblings();
-        final String tmpStr = siblings.get(1).getString().trim();
-        setSenderNick(tmpStr.substring(0, tmpStr.indexOf(' ')));
+        
+        ClickEvent abstractClickEvent = m_message.getStyle().getClickEvent();
+        if (abstractClickEvent instanceof ClickEvent.SuggestCommand clickEvent) {
+            setSenderNick(clickEvent.command().substring(3, clickEvent.command().length() - 1));
+        }
     }
 
     @AutoService(Provider.class)
@@ -50,29 +49,21 @@ public class MeChatMessage extends ChatMessageWithSender {
         @Override
         public Predicate<Text> validator() {
             return message -> {
-                final List<Text> siblings = message.getSiblings();
-                return (
-                    siblings.size() == 2 &&
+                List<Text> siblings = message.getSiblings();
+                return siblings.size() == 3 &&
                     siblings.get(0).getString().equals("*") &&
-                    siblings.get(1).getString().startsWith(" ")
-                );
+                    siblings.get(1).getString().equals("] ") &&
+                    siblings.get(2).getString().startsWith("[");
             };
         }
         @Override
         public Function<Text, ChatMessage> creator() {
-            return MeChatMessage::new;
+            return PMToMeChatMessage::new;
         }
     }
 
     @Override
     public Text getChangedMessage() {
-        MutableText newMsg = m_message.copy();
-        final List<Text> siblings = newMsg.getSiblings();
-        final Style senderStyle = siblings.get(s_nickIndex).getStyle()
-            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
-
-        siblings.set(s_nickIndex, siblings.get(s_nickIndex).copy().setStyle(senderStyle));
-        return addExtraStuff(newMsg);
+        return addExtraStuff(getMessage());
     }
 }
