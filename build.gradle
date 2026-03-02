@@ -1,6 +1,6 @@
 plugins {
 	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
-	id 'net.octyl.level-headered' version "${octyl_headered_version}"
+	id 'dev.yumi.gradle.licenser' version "${licenser_version}"
 	id 'maven-publish'
 }
 
@@ -84,12 +84,9 @@ jar {
 	}
 }
 
-levelHeadered {
-    headerTemplate(rootProject.file("HEADER.txt"))
-    
-    sourceMatchPatterns {
-        //exclude('org/ayoree/chatimprover/somefolder/')
-    }
+license {
+	rule(file("HEADER.txt"))
+	include("**/*.java")
 }
 
 publishing {
