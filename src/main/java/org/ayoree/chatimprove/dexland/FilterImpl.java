@@ -184,4 +184,24 @@ public class FilterImpl extends Filter {
             };
         }
     }
+
+    @AutoService(Provider.class)
+    public static class AutoMineFilterProviderImpl extends AddonInformerImpl implements Provider {
+        @Override
+        public Predicate<Text> validator() {
+            return text -> {
+                if (!Config.getInst().isBlockAutoMineMessages)
+                    return false;
+                List<Text> siblings = text.getSiblings();
+                return (siblings.size() == 6 &&
+                    siblings.get(0).getString().equals("АвтоШахта") &&
+                    siblings.get(1).getString().equals(" ") &&
+                    siblings.get(2).getString().equals("» ") &&
+                    siblings.get(3).getString().equals("Шахта обновлена") &&
+                    siblings.get(4).getString().equals(", телепортироваться - ") &&
+                    siblings.get(5).getString().equals("/warp mine")
+                );
+            };
+        }
+    }
 }

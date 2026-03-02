@@ -65,6 +65,8 @@ public class Config {
     public boolean isBlockSusPVPMessages = true;
     @SerialEntry
     public boolean isBlockWonDuelMessages = true;
+    @SerialEntry
+    public boolean isBlockAutoMineMessages = true;
 
     private static Config instance = null;
     private static ConfigClassHandler<Config> HANDLER = ConfigClassHandler.createBuilder(Config.class)
