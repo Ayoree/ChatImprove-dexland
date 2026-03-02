@@ -9,6 +9,7 @@ on: [pull_request, push]
 jobs:
   build:
     runs-on: ubuntu-24.04
+    environment: github-packages
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
@@ -23,6 +24,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
+        env:
+          AYOREE_GET_PACKAGES_KEY: ${{ secrets.AYOREE_GET_PACKAGES_KEY }}
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
         with:

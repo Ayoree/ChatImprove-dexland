@@ -27,7 +27,7 @@ repositories {
             username = 'Ayoree'
             password = System.getenv("AYOREE_GET_PACKAGES_KEY") // Ask for it, if you want
         }
-   }
+   	}
 }
 
 dependencies {
