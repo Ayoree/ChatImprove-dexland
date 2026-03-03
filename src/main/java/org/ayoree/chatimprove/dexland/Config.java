@@ -38,11 +38,15 @@ public class Config {
     @SerialEntry
     public String incorrectKickMsg = "/ban {NICKNAME} 1h 4.21 [Некорректный кик игрока `{RECEIVER}`]";
     @SerialEntry
+    public String incorrectJailMsg = "/ban {NICKNAME} 1h 4.21 [Некорректный jail игрока `{RECEIVER}`]";
+    @SerialEntry
     public String incorrectUnbanMsg = "/ban {NICKNAME} 8h 4.20 [Некорректный разбан игрока `{RECEIVER}`]";
     @SerialEntry
     public String incorrectUnmuteMsg = "/ban {NICKNAME} 8h 4.20 [Некорректный размут игрока `{RECEIVER}`]";
     @SerialEntry
     public String incorrectUnwarnMsg = "/ban {NICKNAME} 1h 4.20 [Некорректное снятие варна с игрока `{RECEIVER}`]";
+    @SerialEntry
+    public String incorrectUnjailMsg = "/ban {NICKNAME} 1h 4.20 [Некорректное освобождение игрока `{RECEIVER}`]";
     // Used when using `/co i`
     @SerialEntry
     public String coreProtectCommand = "/ban {NICKNAME} ";
