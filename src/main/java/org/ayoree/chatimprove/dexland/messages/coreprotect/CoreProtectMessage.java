@@ -62,7 +62,7 @@ public class CoreProtectMessage extends ChatMessageWithSender {
     }
 
     @Override
-    public Text getChangedMessage() {
+    public ChatMessage generateChangedMsg() {
         String banStr = Config.getInst().coreProtectCommand;
         banStr = banStr.replace("{NICKNAME}", getSenderNick());
 
@@ -73,6 +73,7 @@ public class CoreProtectMessage extends ChatMessageWithSender {
             .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
         siblings.set(s_nickIndex, siblings.get(s_nickIndex).copy().setStyle(nickStyle));
 
-        return addExtraStuff(newMsg);
+        m_changedMsg = newMsg;
+        return this;
     }
 }

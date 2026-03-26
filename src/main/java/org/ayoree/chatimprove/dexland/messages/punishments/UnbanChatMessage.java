@@ -72,7 +72,7 @@ public class UnbanChatMessage extends UnPunishChatMessage {
     }
 
     @Override
-    public Text getChangedMessage() {
+    public ChatMessage generateChangedMsg() {
         String banStr = Config.getInst().incorrectUnbanMsg;
         banStr = banStr.replace("{NICKNAME}", getSenderNick()).replace("{RECEIVER}", getReceiverNick());
 
@@ -89,6 +89,7 @@ public class UnbanChatMessage extends UnPunishChatMessage {
         siblings.set(start + s_senderIndex, siblings.get(start + s_senderIndex).copy().setStyle(senderStyle));
         siblings.set(start + s_receiverIndex, siblings.get(start + s_receiverIndex).copy().setStyle(receiverStyle));
 
-        return addExtraStuff(newMsg);
+        m_changedMsg = newMsg;
+        return this;
     }
 }

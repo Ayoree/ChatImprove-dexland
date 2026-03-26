@@ -25,7 +25,6 @@ import java.util.function.Predicate;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprover.api.ChatMessage;
-import org.ayoree.chatimprover.api.ChatMessageWithReceiverAndSender;
 import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
@@ -63,7 +62,8 @@ public class PMToMeChatMessage extends ChatMessageWithSender {
     }
 
     @Override
-    public Text getChangedMessage() {
-        return addExtraStuff(getMessage());
+    public ChatMessage generateChangedMsg() {
+        m_changedMsg = getOrigMessage();
+        return this;
     }
 }

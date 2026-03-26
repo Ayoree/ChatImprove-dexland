@@ -73,7 +73,7 @@ public class CommonChatMessage extends ChatMessageWithSender {
     }
 
     @Override
-    public Text getChangedMessage() {
+    public ChatMessage generateChangedMsg() {
         MutableText newMsg = Text.empty();
         final Text donatePart = getRank();
         final Text nickPart = Text.of("§f" + getSenderNick() + " ");
@@ -89,7 +89,8 @@ public class CommonChatMessage extends ChatMessageWithSender {
         for (int i = 1; i < siblings.size(); ++i) {
             newMsg.append(siblings.get(i));
         }
-        return addExtraStuff(newMsg);
+        m_changedMsg = newMsg;
+        return this;
     }
 
     private Text getRank() {

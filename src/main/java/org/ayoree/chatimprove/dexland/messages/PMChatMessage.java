@@ -63,7 +63,7 @@ public class PMChatMessage extends ChatMessageWithReceiverAndSender {
     }
 
     @Override
-    public Text getChangedMessage() {
+    public ChatMessage generateChangedMsg() {
         MutableText newMsg = Text.empty();
         final Style senderStyle = Style.EMPTY
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick()))
@@ -77,6 +77,7 @@ public class PMChatMessage extends ChatMessageWithReceiverAndSender {
         newMsg.append(Text.of("§a" + getReceiverNick()).copy().setStyle(receiverStyle));
         newMsg.append(Text.of("§f]§r ").copy().setStyle(Style.EMPTY));
         newMsg.append(m_textPart);
-        return addExtraStuff(newMsg);
+        m_changedMsg = newMsg;
+        return this;
     }
 }

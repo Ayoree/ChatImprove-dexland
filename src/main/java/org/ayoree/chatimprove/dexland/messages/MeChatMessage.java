@@ -65,7 +65,7 @@ public class MeChatMessage extends ChatMessageWithSender {
     }
 
     @Override
-    public Text getChangedMessage() {
+    public ChatMessage generateChangedMsg() {
         MutableText newMsg = m_message.copy();
         final List<Text> siblings = newMsg.getSiblings();
         final Style senderStyle = siblings.get(s_nickIndex).getStyle()
@@ -73,6 +73,7 @@ public class MeChatMessage extends ChatMessageWithSender {
             .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
 
         siblings.set(s_nickIndex, siblings.get(s_nickIndex).copy().setStyle(senderStyle));
-        return addExtraStuff(newMsg);
+        m_changedMsg = newMsg;
+        return this;
     }
 }

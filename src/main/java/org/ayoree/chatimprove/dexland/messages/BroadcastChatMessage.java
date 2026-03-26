@@ -65,7 +65,7 @@ public class BroadcastChatMessage extends ChatMessageWithSender {
     }
 
     @Override
-    public Text getChangedMessage() {
+    public ChatMessage generateChangedMsg() {
         MutableText newMsg = m_message.copy();
         final Style senderStyle = Style.EMPTY
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
@@ -75,6 +75,7 @@ public class BroadcastChatMessage extends ChatMessageWithSender {
         final int index = siblings.size() - 2;
         siblings.set(index, siblings.get(index).copy().setStyle(senderStyle));
 
-        return addExtraStuff(newMsg);
+        m_changedMsg = newMsg;
+        return this;
     }
 }

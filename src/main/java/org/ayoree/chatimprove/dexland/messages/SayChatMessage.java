@@ -61,12 +61,13 @@ public class SayChatMessage extends ChatMessageWithSender {
     }
 
     @Override
-    public Text getChangedMessage() {
+    public ChatMessage generateChangedMsg() {
         final Style senderStyle = m_message.getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
             .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
             
         MutableText newMsg = m_message.copy().setStyle(senderStyle);
-        return addExtraStuff(newMsg);
+        m_changedMsg = newMsg;
+        return this;
     }
 }
