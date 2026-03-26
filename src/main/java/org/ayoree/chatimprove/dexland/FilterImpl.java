@@ -173,13 +173,14 @@ public class FilterImpl extends Filter {
                 if (!Config.getInst().isBlockWonDuelMessages)
                     return false;
                 List<Text> siblings = text.getSiblings();
-                return (siblings.size() == 11 &&
+                return (siblings.size() >= 11 &&
                     siblings.get(0).getString().equals("Дуэли ") &&
                     siblings.get(1).getString().equals("▸ ") &&
                     siblings.get(2).getString().equals("Игрок ") &&
                     siblings.get(4).getString().equals("победил ") &&
                     siblings.get(6).getString().equals("за ") &&
-                    siblings.get(8).getString().equals("минут с набором ")
+                    siblings.get(8).getString().equals("минут с набором ") &&
+                    siblings.getLast().getString().equals("(Скрыть: /duel msg)")
                 );
             };
         }
