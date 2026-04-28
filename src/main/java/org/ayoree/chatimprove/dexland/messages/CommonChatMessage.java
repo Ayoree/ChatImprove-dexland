@@ -60,10 +60,8 @@ public class CommonChatMessage extends ChatMessageWithSender {
         public Predicate<Text> validator() {
             return message -> {
                 // Do not create CommonChatMessage instance if disabled this config option
-                if (!Config.getInst().isChangeGlobalLocal)
-                    return false;
                 final List<Text> siblings = message.getSiblings();
-                return siblings.size() == 2 && siblings.getFirst().getString().endsWith("→ ");
+                return siblings.size() == 2 && siblings.getFirst().getString().endsWith("→ ") && siblings.getFirst().getStyle().getHoverEvent() != null;
             };
         }
         @Override
@@ -74,6 +72,9 @@ public class CommonChatMessage extends ChatMessageWithSender {
 
     @Override
     public ChatMessage generateChangedMsg() {
+        if (!Config.getInst().isChangeGlobalLocal)
+            return this;
+
         MutableText newMsg = Text.empty();
         final Text donatePart = getRank();
         final Text nickPart = Text.of("§f" + getSenderNick() + " ");
