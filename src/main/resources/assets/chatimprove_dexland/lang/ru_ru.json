@@ -1,0 +1,65 @@
+{
+  "yacl3.config.chatimprove_dexland:config.title": "",
+
+  "yacl3.config.chatimprove_dexland:config.category.customization": "Кастомизация",
+
+  "yacl3.config.chatimprove_dexland:config.category.customization.group.punishments": "Команды наказаний",
+  "yacl3.config.chatimprove_dexland:config.category.customization.group.punishments.desc": "Эти команды будут предлагаться при клике на ники в сообщениях о наказаниях!\n\nДоступные плейсхолдеры:\n\t1) {NICKNAME} - ник игрока, который выдал наказание;\n\t2) {RECEIVER} - ник игрока, который получил наказание;",
+
+  "yacl3.config.chatimprove_dexland:config.incorrectBanMsg": "Некорректный бан",
+  "yacl3.config.chatimprove_dexland:config.incorrectBanMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто выдал бан",
+  "yacl3.config.chatimprove_dexland:config.incorrectMuteMsg": "Некорректный мут",
+  "yacl3.config.chatimprove_dexland:config.incorrectMuteMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто выдал мут",
+  "yacl3.config.chatimprove_dexland:config.incorrectWarnMsg": "Некорректный варн",
+  "yacl3.config.chatimprove_dexland:config.incorrectWarnMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто выдал варн",
+  "yacl3.config.chatimprove_dexland:config.incorrectKickMsg": "Некорректный кик",
+  "yacl3.config.chatimprove_dexland:config.incorrectKickMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто выдал кик",
+  "yacl3.config.chatimprove_dexland:config.incorrectJailMsg": "Некорректный jail",
+  "yacl3.config.chatimprove_dexland:config.incorrectJailMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто посадил игрока",
+  "yacl3.config.chatimprove_dexland:config.incorrectUnbanMsg": "Некорректный разбан",
+  "yacl3.config.chatimprove_dexland:config.incorrectUnbanMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто снял бан",
+  "yacl3.config.chatimprove_dexland:config.incorrectUnmuteMsg": "Некорректный размут",
+  "yacl3.config.chatimprove_dexland:config.incorrectUnmuteMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто снял мут",
+  "yacl3.config.chatimprove_dexland:config.incorrectUnwarnMsg": "Некорректный разварн",
+  "yacl3.config.chatimprove_dexland:config.incorrectUnwarnMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто снял варн",
+  "yacl3.config.chatimprove_dexland:config.incorrectUnjailMsg": "Некорректный jail free",
+  "yacl3.config.chatimprove_dexland:config.incorrectUnjailMsg.desc": "Команда, которая предлагается, если нажать на ник того, кто освободил игрока из тюрьмы",
+
+  "yacl3.config.chatimprove_dexland:config.category.customization.group.coreprotect": "Проверка блоков через /co i",
+  "yacl3.config.chatimprove_dexland:config.category.customization.group.coreprotect.desc": "Эти команды будут предлагаться при клике на ники в сообщениях, показанных при использовании `/co i`!\n\nДоступные плейсхолдеры:\n\t1) {NICKNAME} - ник игрока, который совершил изменение;",
+
+  "yacl3.config.chatimprove_dexland:config.coreProtectCommand": "/co i",
+  "yacl3.config.chatimprove_dexland:config.coreProtectCommand.desc": "Команда, которая предлагается, если нажать на ник того, кто совершил изменение",
+
+  "yacl3.config.chatimprove_dexland:config.category.customization.group.spamfilter": "Спам-Фильтр",
+  "yacl3.config.chatimprove_dexland:config.category.customization.group.spamfilter.desc": "Фильтровать бесполезные сообщения в чате",
+
+  "yacl3.config.chatimprove_dexland:config.isBlockAdsMessages": "Реклама",
+  "yacl3.config.chatimprove_dexland:config.isBlockAdsMessages.desc": "Фильтровать рекламные сообщения.\n\nНапример:\n§a§l[*]§f Донат§c§l [Владелец]§f получает по§a§l 10.000§e⛁",
+  "yacl3.config.chatimprove_dexland:config.isBlockCaseMessages": "Ежедневные кейсы",
+  "yacl3.config.chatimprove_dexland:config.isBlockCaseMessages.desc": "Фильтровать сообщения об открытии ежедневных кейсов.\n\nНапример:\n§6§l|§7 Игрок§6 Pupa§f выбил§e Незеритовый меч§7 из ежедневного кейса на /warp case",
+  "yacl3.config.chatimprove_dexland:config.isBlockJoinMessages": "Приветствия",
+  "yacl3.config.chatimprove_dexland:config.isBlockJoinMessages.desc": "Фильтровать приветственные сообщения.\n\nНапример:\n§c⇨ Добро пожаловать на сервер§l БлаБлаБла",
+  "yacl3.config.chatimprove_dexland:config.isBlockPaymentMessages": "Выплаты по времени",
+  "yacl3.config.chatimprove_dexland:config.isBlockPaymentMessages.desc": "Фильтровать сообщения об получении монет за проведенное время в игре.\n\nНапример:\n§a§l[*]§f Ты получил§a§l +10000§e⛁§f за§a§l 5§a минут§f игры.",
+  "yacl3.config.chatimprove_dexland:config.isBlockAutoMineMessages": "Автошахта",
+  "yacl3.config.chatimprove_dexland:config.isBlockAutoMineMessages.desc": "Фильтровать сообщения об обновлении автошахты.\n\nНапример:\n§a§lАвтоШахта§8 »§f Шахта обновлена, телепортироваться -§e /warp mine",
+  "yacl3.config.chatimprove_dexland:config.isBlockWonDuelMessages": "Победы в дуэлях",
+  "yacl3.config.chatimprove_dexland:config.isBlockWonDuelMessages.desc": "Фильтровать сообщения об победах в дуэлях.\n\nНапример:\n§6§lДуэли§8 ▸§f Игрок§a Pupa§f победил§a Lupa§f за§a 00:07§f минут с набором§d Кожанка PvP§7 (Скрыть: /duel msg)",
+  "yacl3.config.chatimprove_dexland:config.isBlockPVPLeaveMessages": "Выход во время PVP",
+  "yacl3.config.chatimprove_dexland:config.isBlockPVPLeaveMessages.desc": "Фильтровать сообщения об выходе из игры во время PVP.\n\nНапример:\n§6§l|§f Игрок§6 Pupa§f покинул игру во время§6 PvP§f и§c был убит",
+  "yacl3.config.chatimprove_dexland:config.isBlockSusPVPMessages": "Подозрения на читы",
+  "yacl3.config.chatimprove_dexland:config.isBlockSusPVPMessages.desc": "Фильтровать сообщения об киках античита.\n\nНапример:\n§6АнтиЧит§8 ▸§f Игрок§c Pupa§f кикнут по подозрению в использовании читов.",
+  "yacl3.config.chatimprove_dexland:config.isBlockSpleefMessages": "Победы на сплиф",
+  "yacl3.config.chatimprove_dexland:config.isBlockSpleefMessages.desc": "Фильтровать сообщения о победах на сплифе.\n\nНапример:\n§6§lSpleef §8▸ §fПобедитель: §aPupa§f! §7Хочешь тоже развлекаться? Пиши: /spleef join",
+
+  "yacl3.config.chatimprove_dexland:config.category.customization.group.misc": "Прочее",
+  "yacl3.config.chatimprove_dexland:config.category.customization.group.misc.desc": "Другое",
+
+  "yacl3.config.chatimprove_dexland:config.isChangeGlobalLocal": "Показывать только донат и ник в Глобальном и Локальном чатах",
+  "yacl3.config.chatimprove_dexland:config.isChangeGlobalLocal.desc": "Убирает клан, префикс, суффикс, и меняет измененный ник на настоящий ник игрока в локальном и глобальном чатах",
+  "yacl3.config.chatimprove_dexland:config.isAutoServerSuffix": "Авто определение сервера",
+  "yacl3.config.chatimprove_dexland:config.isAutoServerSuffix.desc": "Автоматически добавлять `server:surv-x` в конец команды, если есть возможность определить сервер",
+  "yacl3.config.chatimprove_dexland:config.isRemoveColors": "Белый шрифт игроков",
+  "yacl3.config.chatimprove_dexland:config.isRemoveColors.desc": "Менять цвет шрифта сообщений игроков в чате на белый"
+}
