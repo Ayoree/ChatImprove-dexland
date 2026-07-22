@@ -205,4 +205,23 @@ public class FilterImpl extends Filter {
             };
         }
     }
+
+    @AutoService(Provider.class)
+    public static class SpleefFilterProviderImpl extends AddonInformerImpl implements Provider {
+        @Override
+        public Predicate<Text> validator() {
+            return text -> {
+                if (!Config.getInst().isBlockSpleefMessages)
+                    return false;
+                List<Text> siblings = text.getSiblings();
+                return (siblings.size() == 6 &&
+                    siblings.get(0).getString().equals("Spleef ") &&
+                    siblings.get(1).getString().equals("▸ ") &&
+                    siblings.get(2).getString().equals("Победитель: ") &&
+                    siblings.get(4).getString().equals("! ") &&
+                    siblings.get(5).getString().equals("Хочешь тоже развлекаться? Пиши: /spleef join")
+                );
+            };
+        }
+    }
 }

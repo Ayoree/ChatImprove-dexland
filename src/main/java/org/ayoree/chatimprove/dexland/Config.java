@@ -72,6 +72,8 @@ public class Config {
     @SerialEntry
     public boolean isBlockAutoMineMessages = true;
     @SerialEntry
+    public boolean isBlockSpleefMessages = true;
+    @SerialEntry
     public boolean isRemoveColors = false;
 
     private static Config instance = null;
