@@ -24,6 +24,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
+import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
 import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
@@ -35,7 +36,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class MeChatMessage extends ChatMessageWithSender {
+public class MeChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
     static protected final int s_nickIndex = 1;
 
     public MeChatMessage(Text message) {
@@ -66,7 +67,9 @@ public class MeChatMessage extends ChatMessageWithSender {
 
     @Override
     public ChatMessage generateChangedMsg() {
-        MutableText newMsg = m_message.copy();
+        m_changedMsg = Config.getInst().isRemoveColors ? removeStyle(getOrigMessage()) : getOrigMessage();
+
+        MutableText newMsg = m_changedMsg.copy();
         final List<Text> siblings = newMsg.getSiblings();
         final Style senderStyle = siblings.get(s_nickIndex).getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
@@ -75,5 +78,26 @@ public class MeChatMessage extends ChatMessageWithSender {
         siblings.set(s_nickIndex, siblings.get(s_nickIndex).copy().setStyle(senderStyle));
         m_changedMsg = newMsg;
         return this;
+    }
+
+    @Override
+    public Text removeStyle(Text message) {
+        List<Text> siblings = message.getSiblings();
+        final MutableText newText = Text.empty();
+
+        Text part = siblings.get(0);
+        newText.append(part);
+        newText.append(siblings.get(1).copyContentOnly());
+        siblings = siblings.get(1).getSiblings();
+        
+        for (int i = 0; i < siblings.size(); ++i) {
+            if (i != siblings.size() - 1)
+                newText.append(siblings.get(i));
+            else {
+                newText.append(siblings.get(i).getString());
+            }
+        }
+
+        return newText;
     }
 }

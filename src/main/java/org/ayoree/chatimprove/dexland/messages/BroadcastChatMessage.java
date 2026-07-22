@@ -24,6 +24,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
+import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
 import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
@@ -35,7 +36,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class BroadcastChatMessage extends ChatMessageWithSender {
+public class BroadcastChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
     public BroadcastChatMessage(Text message) {
         super(message);
         final List<Text> siblings = m_message.getSiblings();
@@ -66,7 +67,9 @@ public class BroadcastChatMessage extends ChatMessageWithSender {
 
     @Override
     public ChatMessage generateChangedMsg() {
-        MutableText newMsg = m_message.copy();
+        m_changedMsg = Config.getInst().isRemoveColors ? removeStyle(getOrigMessage()) : getOrigMessage();
+
+        MutableText newMsg = m_changedMsg.copy();
         final Style senderStyle = Style.EMPTY
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
             .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
@@ -77,5 +80,22 @@ public class BroadcastChatMessage extends ChatMessageWithSender {
 
         m_changedMsg = newMsg;
         return this;
+    }
+
+    @Override
+    public Text removeStyle(Text message) {
+        final List<Text> siblings = message.getSiblings();
+        final MutableText newText = Text.empty();
+        int i = 0;
+        for (; i < 3; ++i) {
+            newText.append(siblings.get(i));
+        }
+        for (; i < siblings.size() - 3; ++i) {
+            newText.append(siblings.get(i).getString());
+        }
+        for (; i < siblings.size(); ++i) {
+            newText.append(siblings.get(i));
+        }
+        return newText;
     }
 }

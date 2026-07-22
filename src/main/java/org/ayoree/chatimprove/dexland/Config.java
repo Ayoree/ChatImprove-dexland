@@ -71,6 +71,8 @@ public class Config {
     public boolean isBlockWonDuelMessages = true;
     @SerialEntry
     public boolean isBlockAutoMineMessages = true;
+    @SerialEntry
+    public boolean isRemoveColors = false;
 
     private static Config instance = null;
     private static ConfigClassHandler<Config> HANDLER = ConfigClassHandler.createBuilder(Config.class)

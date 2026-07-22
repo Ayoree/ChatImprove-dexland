@@ -19,12 +19,14 @@
 
 package org.ayoree.chatimprove.dexland.messages;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
+import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
 import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
@@ -36,7 +38,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class SayChatMessage extends ChatMessageWithSender {
+public class SayChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
     static private Pattern m_pattern = Pattern.compile("\\[([^\\s]{3,})\\]\\s.*");
 
     public SayChatMessage(Text message) {
@@ -62,12 +64,33 @@ public class SayChatMessage extends ChatMessageWithSender {
 
     @Override
     public ChatMessage generateChangedMsg() {
-        final Style senderStyle = m_message.getStyle()
+        m_changedMsg = Config.getInst().isRemoveColors ? removeStyle(getOrigMessage()) : getOrigMessage();
+
+        final Style senderStyle = m_changedMsg.getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
             .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
             
-        MutableText newMsg = m_message.copy().setStyle(senderStyle);
-        m_changedMsg = newMsg;
+        m_changedMsg = m_changedMsg.copy().setStyle(senderStyle);
         return this;
+    }
+
+    @Override
+    public Text removeStyle(Text message) {
+        final List<Text> siblings = message.getSiblings();
+        final MutableText newText = Text.empty();
+
+        int startOfTextPart = 0;
+        for (final Text text : siblings) {
+            if (text.getString().equals("] "))
+                break;
+            newText.append(text);
+            ++startOfTextPart;
+        }
+
+        for (int i = startOfTextPart; i < siblings.size(); ++i) {
+            newText.append(siblings.get(i).getString());
+        }
+
+        return newText;
     }
 }

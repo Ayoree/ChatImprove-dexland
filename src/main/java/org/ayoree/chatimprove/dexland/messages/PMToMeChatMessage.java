@@ -24,16 +24,20 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
+import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
 import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 // /msg messages
-public class PMToMeChatMessage extends ChatMessageWithSender {
+public class PMToMeChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
      public PMToMeChatMessage(Text message) {
         super(message);
         
@@ -48,7 +52,7 @@ public class PMToMeChatMessage extends ChatMessageWithSender {
         @Override
         public Predicate<Text> validator() {
             return message -> {
-                List<Text> siblings = message.getSiblings();
+                final List<Text> siblings = message.getSiblings();
                 return siblings.size() == 3 &&
                     siblings.get(0).getString().equals("*") &&
                     siblings.get(1).getString().equals("] ") &&
@@ -63,7 +67,49 @@ public class PMToMeChatMessage extends ChatMessageWithSender {
 
     @Override
     public ChatMessage generateChangedMsg() {
-        m_changedMsg = getOrigMessage();
+        m_changedMsg = Config.getInst().isRemoveColors ? removeStyle(getOrigMessage()) : getOrigMessage();
         return this;
+    }
+
+    @Override
+    public Text removeStyle(Text message) {
+        if (message.getString().startsWith("[*] [я -> "))
+            return message; // pohuy
+
+        List<Text> siblings = message.getSiblings();
+        final MutableText newText = Text.empty();
+
+        newText.append(message.copyContentOnly());
+        newText.append(siblings.get(0));
+        newText.append(siblings.get(1));
+        
+        Text part = siblings.get(2);
+        newText.append(part.copyContentOnly());
+        part = part.getSiblings().get(0);
+        newText.append(part.copyContentOnly());
+
+        siblings = part.getSiblings();
+        for (int i = 0; i < siblings.size(); ++i) {
+            if (i != siblings.size() - 1)
+                newText.append(siblings.get(i));
+            else {
+                part = part.getSiblings().get(i);
+                newText.append(part.copyContentOnly());
+                part = part.getSiblings().get(0);
+                newText.append(part.copyContentOnly());
+                part = part.getSiblings().get(0);
+                newText.append(part.copyContentOnly());
+                for (final Text text : part.getSiblings())
+                    newText.append(text.getString());
+            }
+        }
+
+        final Style senderStyle = Style.EMPTY
+            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
+            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
+            
+        newText.setStyle(senderStyle);
+        
+        return newText;
     }
 }

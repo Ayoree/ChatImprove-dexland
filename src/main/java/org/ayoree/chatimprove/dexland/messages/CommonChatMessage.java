@@ -37,7 +37,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 // Global chat / Local chat
-public class CommonChatMessage extends ChatMessageWithSender {
+public class CommonChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
     protected final String m_textPart;
     private final boolean m_isGlobal;
 
@@ -72,13 +72,15 @@ public class CommonChatMessage extends ChatMessageWithSender {
 
     @Override
     public ChatMessage generateChangedMsg() {
+        m_changedMsg = Config.getInst().isRemoveColors ? removeStyle(getOrigMessage()) : getOrigMessage();
+
         if (!Config.getInst().isChangeGlobalLocal)
             return this;
 
         MutableText newMsg = Text.empty();
         final Text donatePart = getRank();
         final Text nickPart = Text.of("§f" + getSenderNick() + " ");
-        final List<Text> siblings = m_message.getSiblings();
+        final List<Text> siblings = m_changedMsg.getSiblings();
         final Style msgStyle = Style.EMPTY
             .withHoverEvent(new HoverEvent.ShowText(buildHoverText()))
             .withClickEvent(getClickEvent());
@@ -87,6 +89,7 @@ public class CommonChatMessage extends ChatMessageWithSender {
         newMsg.append(donatePart).append(" ").append(nickPart);
         newMsg.setStyle(msgStyle);
         newMsg.append(Text.of("§8→ §r").copy().setStyle(Style.EMPTY));
+        
         for (int i = 1; i < siblings.size(); ++i) {
             newMsg.append(siblings.get(i));
         }
@@ -116,5 +119,16 @@ public class CommonChatMessage extends ChatMessageWithSender {
 
     private ClickEvent getClickEvent() {
         return m_message.getSiblings().getFirst().getStyle().getClickEvent();
+    }
+
+    @Override
+    public Text removeStyle(Text message) {
+        List<Text> siblings = message.getSiblings();
+        if (siblings.isEmpty()) return message;
+
+        MutableText result = Text.empty();
+        result.append(siblings.get(0));
+        result.append(siblings.get(1).getString());
+        return result;
     }
 }
