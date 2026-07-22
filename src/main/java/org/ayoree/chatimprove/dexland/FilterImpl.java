@@ -220,6 +220,12 @@ public class FilterImpl extends Filter {
                     siblings.get(2).getString().equals("Победитель: ") &&
                     siblings.get(4).getString().equals("! ") &&
                     siblings.get(5).getString().equals("Хочешь тоже развлекаться? Пиши: /spleef join")
+                ) || (
+                    siblings.size() == 4 &&
+                    siblings.get(0).getString().equals("Spleef ") &&
+                    siblings.get(1).getString().equals("▸ ") &&
+                    siblings.get(2).getString().equals("Ничья! ") &&
+                    siblings.get(3).getString().equals("Время игры вышло.")
                 );
             };
         }
