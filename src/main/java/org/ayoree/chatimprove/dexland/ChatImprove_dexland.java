@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 public class ChatImprove_dexland implements ModInitializer {
 	public static final String MOD_ID = "chatimprove_dexland";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final Set<String> IPs = Set.of("mc.dexland.org", "ru.dexland.org", "51.89.26.25", "185.71.66.93");
+    public static final Set<String> IPs = Set.of("mc.dexland.org", "mc.dexland.su", "ru.dexland.org", "balancer.dexland.org", "82.22.5.24", "185.71.66.93");
 
 	@Override
 	public void onInitialize() {
