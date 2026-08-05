@@ -19,12 +19,11 @@
 
 package org.ayoree.chatimprove.dexland.messages.punishments;
 
+import net.minecraft.network.chat.Component;
 import org.ayoree.chatimprover.api.ChatMessageWithReceiverAndSender;
 
-import net.minecraft.text.Text;
-
 public abstract class AnyPunishChatMessage extends ChatMessageWithReceiverAndSender {    
-    protected AnyPunishChatMessage(Text message) {
+    protected AnyPunishChatMessage(Component message) {
         super(message);
     }
 }

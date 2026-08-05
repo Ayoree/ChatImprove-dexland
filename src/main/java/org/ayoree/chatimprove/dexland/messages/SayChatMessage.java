@@ -24,7 +24,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
@@ -32,16 +36,10 @@ import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
 public class SayChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
     static private Pattern m_pattern = Pattern.compile("\\[([^\\s]{3,})\\]\\s.*");
 
-    public SayChatMessage(Text message) {
+    public SayChatMessage(Component message) {
         super(message);
         final String msgStr = m_message.getString();
         setSenderNick(msgStr.substring(1, msgStr.indexOf("] ")));
@@ -50,14 +48,14 @@ public class SayChatMessage extends ChatMessageWithSender implements IChatMessag
     @AutoService(Provider.class)
     public static class ProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return message -> {
                 Matcher matcher = m_pattern.matcher(message.getString());
                 return matcher.matches();
             };
         }
         @Override
-        public Function<Text, ChatMessage> creator() {
+        public Function<Component, ChatMessage> creator() {
             return SayChatMessage::new;
         }
     }
@@ -68,19 +66,19 @@ public class SayChatMessage extends ChatMessageWithSender implements IChatMessag
 
         final Style senderStyle = m_changedMsg.getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы написать §f§n" + getSenderNick())));
             
         m_changedMsg = m_changedMsg.copy().setStyle(senderStyle);
         return this;
     }
 
     @Override
-    public Text removeStyle(Text message) {
-        final List<Text> siblings = message.getSiblings();
-        final MutableText newText = Text.empty();
+    public Component removeStyle(Component message) {
+        final List<Component> siblings = message.getSiblings();
+        final MutableComponent newText = Component.empty();
 
         int startOfTextPart = 0;
-        for (final Text text : siblings) {
+        for (final Component text : siblings) {
             if (text.getString().equals("] "))
                 break;
             newText.append(text);

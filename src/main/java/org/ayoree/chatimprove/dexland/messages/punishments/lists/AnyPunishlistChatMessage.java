@@ -20,10 +20,8 @@
 package org.ayoree.chatimprove.dexland.messages.punishments.lists;
 
 import java.util.List;
-
+import net.minecraft.network.chat.Component;
 import org.ayoree.chatimprove.dexland.messages.punishments.AnyPunishChatMessage;
-
-import net.minecraft.text.Text;
 
 public abstract class AnyPunishlistChatMessage extends AnyPunishChatMessage {
     protected static final int s_senderIndex = 3;
@@ -31,11 +29,11 @@ public abstract class AnyPunishlistChatMessage extends AnyPunishChatMessage {
     
     protected String m_server;
 
-    protected AnyPunishlistChatMessage(Text message) {
+    protected AnyPunishlistChatMessage(Component message) {
         super(message);
-        final List<Text> siblings = m_message.getSiblings();
+        final List<Component> siblings = m_message.getSiblings();
         for (int i = siblings.size() - 1; i >= 0; --i) {
-            final Text sibling = siblings.get(i);
+            final Component sibling = siblings.get(i);
             final String str = sibling.getString();
             if (str.startsWith("(#surv-")) {
                 m_server = str.substring(2, str.lastIndexOf(')'));

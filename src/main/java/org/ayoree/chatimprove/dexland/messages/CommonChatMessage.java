@@ -22,7 +22,11 @@ package org.ayoree.chatimprove.dexland.messages;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
@@ -30,23 +34,17 @@ import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
 // Global chat / Local chat
 public class CommonChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
     protected final String m_textPart;
     private final boolean m_isGlobal;
 
-    public CommonChatMessage(Text message) {
+    public CommonChatMessage(Component message) {
         super(message);
         
-        final List<Text> siblings = message.getSiblings();
+        final List<Component> siblings = message.getSiblings();
         final ClickEvent clickEvent = siblings.getFirst().getStyle().getClickEvent();
-        assert clickEvent != null && clickEvent.getAction() == ClickEvent.Action.SUGGEST_COMMAND;
+        assert clickEvent != null && clickEvent.action() == ClickEvent.Action.SUGGEST_COMMAND;
         final ClickEvent.SuggestCommand suggestCommand = (ClickEvent.SuggestCommand) clickEvent;
         final String command = suggestCommand.command();
         m_isGlobal = getMessageStr().startsWith("[ɢ]");
@@ -57,15 +55,15 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
     @AutoService(Provider.class)
     public static class ProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return message -> {
                 // Do not create CommonChatMessage instance if disabled this config option
-                final List<Text> siblings = message.getSiblings();
+                final List<Component> siblings = message.getSiblings();
                 return siblings.size() == 2 && siblings.getFirst().getString().endsWith("→ ") && siblings.getFirst().getStyle().getHoverEvent() != null;
             };
         }
         @Override
-        public Function<Text, ChatMessage> creator() {
+        public Function<Component, ChatMessage> creator() {
             return CommonChatMessage::new;
         }
     }
@@ -77,10 +75,10 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
         if (!Config.getInst().isChangeGlobalLocal)
             return this;
 
-        MutableText newMsg = Text.empty();
-        final Text donatePart = getRank();
-        final Text nickPart = Text.of("§f" + getSenderNick() + " ");
-        final List<Text> siblings = m_changedMsg.getSiblings();
+        MutableComponent newMsg = Component.empty();
+        final Component donatePart = getRank();
+        final Component nickPart = Component.nullToEmpty("§f" + getSenderNick() + " ");
+        final List<Component> siblings = m_changedMsg.getSiblings();
         final Style msgStyle = Style.EMPTY
             .withHoverEvent(new HoverEvent.ShowText(buildHoverText()))
             .withClickEvent(getClickEvent());
@@ -88,7 +86,7 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
         newMsg.append(m_isGlobal ? "§a[ɢ] " : "§e[ʟ] ");
         newMsg.append(donatePart).append(" ").append(nickPart);
         newMsg.setStyle(msgStyle);
-        newMsg.append(Text.of("§8→ §r").copy().setStyle(Style.EMPTY));
+        newMsg.append(Component.nullToEmpty("§8→ §r").copy().setStyle(Style.EMPTY));
         
         for (int i = 1; i < siblings.size(); ++i) {
             newMsg.append(siblings.get(i));
@@ -97,21 +95,21 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
         return this;
     }
 
-    private Text getRank() {
+    private Component getRank() {
         final HoverEvent hEvent = m_message.getSiblings().getFirst().getStyle().getHoverEvent();
-        assert hEvent != null && hEvent.getAction() == HoverEvent.Action.SHOW_TEXT;
+        assert hEvent != null && hEvent.action() == HoverEvent.Action.SHOW_TEXT;
         final HoverEvent.ShowText showText = (HoverEvent.ShowText) hEvent;
-        final Text hText = showText.value();
+        final Component hText = showText.value();
         final String text = hText.getString();
         final String first = text.split("\\s+", 2)[0];
-        return Text.of(first).copy().setStyle(hText.getStyle());
+        return Component.nullToEmpty(first).copy().setStyle(hText.getStyle());
     }
 
-    private Text buildHoverText() {
+    private Component buildHoverText() {
         final HoverEvent hEvent = m_message.getSiblings().getFirst().getStyle().getHoverEvent();
-        assert hEvent.getAction() == HoverEvent.Action.SHOW_TEXT;
+        assert hEvent.action() == HoverEvent.Action.SHOW_TEXT;
         final HoverEvent.ShowText showText = (HoverEvent.ShowText) hEvent;
-        MutableText hoverText = showText.value().copy();
+        MutableComponent hoverText = showText.value().copy();
         hoverText.append("\n§8Оригинальный клан/префикс/ник/суффикс:\n");
         hoverText.append(m_message.getSiblings().getFirst());
         return hoverText;
@@ -122,11 +120,11 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
     }
 
     @Override
-    public Text removeStyle(Text message) {
-        List<Text> siblings = message.getSiblings();
+    public Component removeStyle(Component message) {
+        List<Component> siblings = message.getSiblings();
         if (siblings.isEmpty()) return message;
 
-        MutableText result = Text.empty();
+        MutableComponent result = Component.empty();
         result.append(siblings.get(0));
         result.append(siblings.get(1).getString());
         return result;

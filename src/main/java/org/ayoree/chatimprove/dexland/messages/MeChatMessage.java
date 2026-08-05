@@ -22,7 +22,11 @@ package org.ayoree.chatimprove.dexland.messages;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
@@ -30,18 +34,12 @@ import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
 public class MeChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
     static protected final int s_nickIndex = 1;
 
-    public MeChatMessage(Text message) {
+    public MeChatMessage(Component message) {
         super(message);
-        final List<Text> siblings = m_message.getSiblings();
+        final List<Component> siblings = m_message.getSiblings();
         final String tmpStr = siblings.get(1).getString().trim();
         setSenderNick(tmpStr.substring(0, tmpStr.indexOf(' ')));
     }
@@ -49,9 +47,9 @@ public class MeChatMessage extends ChatMessageWithSender implements IChatMessage
     @AutoService(Provider.class)
     public static class ProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return message -> {
-                final List<Text> siblings = message.getSiblings();
+                final List<Component> siblings = message.getSiblings();
                 return (
                     siblings.size() == 2 &&
                     siblings.get(0).getString().equals("*") &&
@@ -60,7 +58,7 @@ public class MeChatMessage extends ChatMessageWithSender implements IChatMessage
             };
         }
         @Override
-        public Function<Text, ChatMessage> creator() {
+        public Function<Component, ChatMessage> creator() {
             return MeChatMessage::new;
         }
     }
@@ -69,11 +67,11 @@ public class MeChatMessage extends ChatMessageWithSender implements IChatMessage
     public ChatMessage generateChangedMsg() {
         m_changedMsg = Config.getInst().isRemoveColors ? removeStyle(getOrigMessage()) : getOrigMessage();
 
-        MutableText newMsg = m_changedMsg.copy();
-        final List<Text> siblings = newMsg.getSiblings();
+        MutableComponent newMsg = m_changedMsg.copy();
+        final List<Component> siblings = newMsg.getSiblings();
         final Style senderStyle = siblings.get(s_nickIndex).getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы написать §f§n" + getSenderNick())));
 
         siblings.set(s_nickIndex, siblings.get(s_nickIndex).copy().setStyle(senderStyle));
         m_changedMsg = newMsg;
@@ -81,13 +79,13 @@ public class MeChatMessage extends ChatMessageWithSender implements IChatMessage
     }
 
     @Override
-    public Text removeStyle(Text message) {
-        List<Text> siblings = message.getSiblings();
-        final MutableText newText = Text.empty();
+    public Component removeStyle(Component message) {
+        List<Component> siblings = message.getSiblings();
+        final MutableComponent newText = Component.empty();
 
-        Text part = siblings.get(0);
+        Component part = siblings.get(0);
         newText.append(part);
-        newText.append(siblings.get(1).copyContentOnly());
+        newText.append(siblings.get(1).plainCopy());
         siblings = siblings.get(1).getSiblings();
         
         for (int i = 0; i < siblings.size(); ++i) {

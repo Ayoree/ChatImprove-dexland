@@ -22,27 +22,25 @@ package org.ayoree.chatimprove.dexland.messages.punishments;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprover.api.ChatMessage;
 
 import com.google.auto.service.AutoService;
 
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
 public class UnmuteChatMessage extends UnPunishChatMessage {
     protected static final int s_senderIndex = 2;
     protected static final int s_receiverIndex = 4;
     protected final boolean m_isHidden;
 
-    public UnmuteChatMessage(Text message) {
+    public UnmuteChatMessage(Component message) {
         super(message);
-        final List<Text> siblings = message.getSiblings();
+        final List<Component> siblings = message.getSiblings();
         m_isHidden = siblings.size() == 6;
         final int start = m_isHidden ? 1 : 0;
         setSenderNick(siblings.get(start + s_senderIndex).getString().trim());
@@ -52,9 +50,9 @@ public class UnmuteChatMessage extends UnPunishChatMessage {
     @AutoService(Provider.class)
     public static class ProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return message -> {
-                final List<Text> siblings = message.getSiblings();
+                final List<Component> siblings = message.getSiblings();
                 int start = 0;
                 if (siblings.size() == 6)
                     start = 1;
@@ -66,7 +64,7 @@ public class UnmuteChatMessage extends UnPunishChatMessage {
             };
         }
         @Override
-        public Function<Text, ChatMessage> creator() {
+        public Function<Component, ChatMessage> creator() {
             return UnmuteChatMessage::new;
         }
     }
@@ -76,15 +74,15 @@ public class UnmuteChatMessage extends UnPunishChatMessage {
         String banStr = Config.getInst().incorrectUnmuteMsg;
         banStr = banStr.replace("{NICKNAME}", getSenderNick()).replace("{RECEIVER}", getReceiverNick());
 
-        MutableText newMsg = m_message.copy();
-        final List<Text> siblings = newMsg.getSiblings();
+        MutableComponent newMsg = m_message.copy();
+        final List<Component> siblings = newMsg.getSiblings();
         final int start = m_isHidden ? 1 : 0;
         final Style senderStyle = siblings.get(start + s_senderIndex).getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand(banStr))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty(banStr.replace('&', '§'))));
         final Style receiverStyle = siblings.get(start + s_receiverIndex).getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand("/mute " + getReceiverNick()))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы перемутить §f§n" + getReceiverNick())));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы перемутить §f§n" + getReceiverNick())));
         
         siblings.set(start + s_senderIndex, siblings.get(start + s_senderIndex).copy().setStyle(senderStyle));
         siblings.set(start + s_receiverIndex, siblings.get(start + s_receiverIndex).copy().setStyle(receiverStyle));

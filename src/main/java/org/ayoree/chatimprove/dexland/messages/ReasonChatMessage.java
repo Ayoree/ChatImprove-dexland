@@ -22,21 +22,19 @@ package org.ayoree.chatimprove.dexland.messages;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
+import net.minecraft.network.chat.Component;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprove.dexland.messages.punishments.PunishChatMessage;
 import org.ayoree.chatimprover.api.ChatMessage;
 
 import com.google.auto.service.AutoService;
 
-import net.minecraft.text.Text;
-
 public class ReasonChatMessage extends ChatMessage {
     protected final String m_reason;
 
-    public ReasonChatMessage(Text message) {
+    public ReasonChatMessage(Component message) {
         super(message);
-        final List<Text> siblings = message.getSiblings();
+        final List<Component> siblings = message.getSiblings();
         int startIndex = 1;
         for (int i = startIndex; i < siblings.size(); ++i) {
             if (siblings.get(i).getString().equals("Причина: ")) {
@@ -57,9 +55,9 @@ public class ReasonChatMessage extends ChatMessage {
     @AutoService(Provider.class)
     public static class ProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return message -> {
-                final List<Text> siblings = message.getSiblings();
+                final List<Component> siblings = message.getSiblings();
                 return siblings.size() >= 3 && (
                     (
                         siblings.get(0).getString().equals(" » ") &&
@@ -73,7 +71,7 @@ public class ReasonChatMessage extends ChatMessage {
             };
         }
         @Override
-        public Function<Text, ChatMessage> creator() {
+        public Function<Component, ChatMessage> creator() {
             return ReasonChatMessage::new;
         }
     }

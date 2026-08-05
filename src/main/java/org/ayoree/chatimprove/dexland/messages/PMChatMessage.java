@@ -21,61 +21,59 @@ package org.ayoree.chatimprove.dexland.messages;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprover.api.ChatMessage;
 import org.ayoree.chatimprover.api.ChatMessageWithReceiverAndSender;
 
 import com.google.auto.service.AutoService;
 
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
 // /msg messages
 public class PMChatMessage extends ChatMessageWithReceiverAndSender {
-    protected final Text m_textPart;
+    protected final Component m_textPart;
     static final int startNickIndex = 14;
 
-     public PMChatMessage(Text message) {
+     public PMChatMessage(Component message) {
         super(message);
         
         setSenderNick(getMessageStr().substring(startNickIndex, getMessageStr().indexOf(" -> ", 10)));
         int receiverStartIndex = startNickIndex + (getSenderNick().length()) + 4;
         setReceiverNick(getMessageStr().substring(receiverStartIndex, getMessageStr().indexOf("] ", receiverStartIndex)));
-        m_textPart = Text.of(m_message.getString().substring(receiverStartIndex + getReceiverNick().length() + 2));
+        m_textPart = Component.nullToEmpty(m_message.getString().substring(receiverStartIndex + getReceiverNick().length() + 2));
     }
 
     @AutoService(Provider.class)
     public static class ProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return message -> {
                 return message.getString().startsWith("[*] [SS] [*] [");
             };
         }
         @Override
-        public Function<Text, ChatMessage> creator() {
+        public Function<Component, ChatMessage> creator() {
             return PMChatMessage::new;
         }
     }
 
     @Override
     public ChatMessage generateChangedMsg() {
-        MutableText newMsg = Text.empty();
+        MutableComponent newMsg = Component.empty();
         final Style senderStyle = Style.EMPTY
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick()))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы написать §f§n" + getSenderNick())));
         final Style receiverStyle = Style.EMPTY
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getReceiverNick()))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getReceiverNick())));
-        newMsg.append(Text.of("§7[SS] §f[").copy().setStyle(Style.EMPTY));
-        newMsg.append(Text.of("§a" + getSenderNick()).copy().setStyle(senderStyle));
-        newMsg.append(Text.of("§7 -> ").copy().setStyle(Style.EMPTY));
-        newMsg.append(Text.of("§a" + getReceiverNick()).copy().setStyle(receiverStyle));
-        newMsg.append(Text.of("§f]§r ").copy().setStyle(Style.EMPTY));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы написать §f§n" + getReceiverNick())));
+        newMsg.append(Component.nullToEmpty("§7[SS] §f[").copy().setStyle(Style.EMPTY));
+        newMsg.append(Component.nullToEmpty("§a" + getSenderNick()).copy().setStyle(senderStyle));
+        newMsg.append(Component.nullToEmpty("§7 -> ").copy().setStyle(Style.EMPTY));
+        newMsg.append(Component.nullToEmpty("§a" + getReceiverNick()).copy().setStyle(receiverStyle));
+        newMsg.append(Component.nullToEmpty("§f]§r ").copy().setStyle(Style.EMPTY));
         newMsg.append(m_textPart);
         m_changedMsg = newMsg;
         return this;

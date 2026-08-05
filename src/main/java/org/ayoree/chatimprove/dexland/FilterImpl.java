@@ -21,18 +21,16 @@ package org.ayoree.chatimprove.dexland;
 
 import java.util.List;
 import java.util.function.Predicate;
-
+import net.minecraft.network.chat.Component;
 import org.ayoree.chatimprover.api.Filter;
 
 import com.google.auto.service.AutoService;
-
-import net.minecraft.text.Text;
 
 public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class EmptyFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> text.getString().isBlank();
         }
     }
@@ -40,11 +38,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class AdsFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockAdsMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (siblings.size() == 14 &&
                     siblings.get(0).getString().equals(" ✸ ") &&
                     siblings.get(1).getString().equals("Хотите быть первым вкурсе ") &&
@@ -72,11 +70,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class JoinFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockJoinMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (
                     siblings.size() >= 3 &&
                     siblings.get(0).getString().isBlank() &&
@@ -89,11 +87,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class CaseFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockCaseMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (siblings.size() == 6 &&
                     siblings.get(0).getString().equals("| ") &&
                     siblings.get(1).getString().equals("Игрок ") &&
@@ -107,11 +105,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class PaymentFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockPaymentMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (siblings.size() == 11 &&
                     siblings.get(0).getString().equals("[") &&
                     siblings.get(1).getString().equals("*") &&
@@ -130,11 +128,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class PVPLeaveFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockPVPLeaveMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (siblings.size() == 7 &&
                     siblings.get(0).getString().equals("|") &&
                     siblings.get(1).getString().equals(" Игрок ") &&
@@ -150,11 +148,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class SusPVPFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockSusPVPMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (siblings.size() == 5 &&
                     siblings.get(0).getString().equals("АнтиЧит") &&
                     siblings.get(1).getString().equals(" ▸ ") &&
@@ -168,11 +166,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class WonDuelFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockWonDuelMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (siblings.size() >= 11 &&
                     siblings.get(0).getString().equals("Дуэли ") &&
                     siblings.get(1).getString().equals("▸ ") &&
@@ -189,11 +187,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class AutoMineFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockAutoMineMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (siblings.size() == 6 &&
                     siblings.get(0).getString().equals("АвтоШахта") &&
                     siblings.get(1).getString().equals(" ") &&
@@ -209,11 +207,11 @@ public class FilterImpl extends Filter {
     @AutoService(Provider.class)
     public static class SpleefFilterProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return text -> {
                 if (!Config.getInst().isBlockSpleefMessages)
                     return false;
-                List<Text> siblings = text.getSiblings();
+                List<Component> siblings = text.getSiblings();
                 return (siblings.size() == 6 &&
                     siblings.get(0).getString().equals("Spleef ") &&
                     siblings.get(1).getString().equals("▸ ") &&

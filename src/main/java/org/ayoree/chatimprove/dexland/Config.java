@@ -26,7 +26,7 @@ import dev.isxander.yacl3.config.v2.api.autogen.StringField;
 import dev.isxander.yacl3.config.v2.api.autogen.TickBox;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 import static org.ayoree.chatimprove.dexland.ChatImprove_dexland.MOD_ID;
 import static org.ayoree.chatimprove.dexland.ChatImprove_dexland.LOGGER;
@@ -139,7 +139,7 @@ public class Config {
 
     private static Config instance = null;
     private static ConfigClassHandler<Config> HANDLER = ConfigClassHandler.createBuilder(Config.class)
-            .id(Identifier.of(MOD_ID, "config"))
+            .id(Identifier.fromNamespaceAndPath(MOD_ID, "config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(FabricLoader.getInstance().getConfigDir().resolve("chatimprover/%s.json5".formatted(MOD_ID)))
                     .setJson5(true)
