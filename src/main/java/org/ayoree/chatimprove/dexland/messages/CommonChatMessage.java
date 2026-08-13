@@ -101,7 +101,7 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
         final HoverEvent.ShowText showText = (HoverEvent.ShowText) hEvent;
         final Component hText = showText.value();
         final String text = hText.getString();
-        final String first = text.split("\\s+", 2)[0];
+        final String first = text.split("\\n", 2)[0];
         return Component.nullToEmpty(first).copy().setStyle(hText.getStyle());
     }
 
