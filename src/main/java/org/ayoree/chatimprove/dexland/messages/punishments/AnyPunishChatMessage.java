@@ -19,11 +19,33 @@
 
 package org.ayoree.chatimprove.dexland.messages.punishments;
 
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprover.api.ChatMessageWithReceiverAndSender;
 
 public abstract class AnyPunishChatMessage extends ChatMessageWithReceiverAndSender {    
     protected AnyPunishChatMessage(Component message) {
         super(message);
+    }
+
+    /** Adds a client-side button that prepares a private removal request. */
+    protected void appendRemovalRequestButton(MutableComponent message, String removalCommand) {
+        if (getSenderNick().equalsIgnoreCase("Console")) {
+            return;
+        }
+
+        String request = "/m " + getSenderNick()
+            + " Пожалуйста, сними наказание с " + getReceiverNick()
+            + ": " + removalCommand;
+        Component button = Component.nullToEmpty(" §b[Попросить снять]").copy().setStyle(Style.EMPTY
+            .withClickEvent(new ClickEvent.SuggestCommand(request))
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty(
+                "§7Попросить §f§n" + getSenderNick()
+                + "§7 снять наказание с §f§n" + getReceiverNick()
+            ))));
+        message.append(button);
     }
 }

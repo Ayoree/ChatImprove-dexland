@@ -81,6 +81,7 @@ public class MutelistChatMessage extends PunishlistChatMessage {
         
         siblings.set(s_receiverIndex, siblings.get(s_receiverIndex).copy().setStyle(receiverStyle));
         siblings.set(s_senderIndex, siblings.get(s_senderIndex).copy().setStyle(senderStyle));
+        appendRemovalRequestButton(newMsg, unmuteStr);
 
         m_changedMsg = newMsg;
         return this;
