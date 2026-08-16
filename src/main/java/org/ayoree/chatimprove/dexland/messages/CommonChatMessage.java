@@ -96,15 +96,26 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
         m_changedMsg = newMsg;
         return this;
     }
-
     private Text getRank() {
         final HoverEvent hEvent = m_message.getSiblings().getFirst().getStyle().getHoverEvent();
         assert hEvent != null && hEvent.getAction() == HoverEvent.Action.SHOW_TEXT;
         final HoverEvent.ShowText showText = (HoverEvent.ShowText) hEvent;
         final Text hText = showText.value();
-        final String text = hText.getString();
-        final String first = text.split("\\s+", 2)[0];
-        return Text.of(first).copy().setStyle(hText.getStyle());
+        final String text = hText.getString().trim();
+
+        String[] parts = text.split("\\s+");
+        if (parts.length == 0 || parts[0].isEmpty()) {
+            return Text.of("").copy().setStyle(hText.getStyle());
+        }
+
+        String rankStr;
+        if (parts.length >= 2 && parts[0].equalsIgnoreCase("Гл.")) {
+            rankStr = parts[0] + " " + parts[1];
+        } else {
+            rankStr = parts[0];
+        }
+
+        return Text.of(rankStr).copy().setStyle(hText.getStyle());
     }
 
     private Text buildHoverText() {
