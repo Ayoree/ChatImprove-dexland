@@ -22,7 +22,11 @@ package org.ayoree.chatimprove.dexland.messages;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprover.api.ChatMessage;
@@ -30,15 +34,9 @@ import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
 import com.google.auto.service.AutoService;
 
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
 // /msg messages
 public class PMToMeChatMessage extends ChatMessageWithSender implements IChatMessageWithoutStyle {
-     public PMToMeChatMessage(Text message) {
+     public PMToMeChatMessage(Component message) {
         super(message);
         
         ClickEvent abstractClickEvent = m_message.getStyle().getClickEvent();
@@ -50,9 +48,9 @@ public class PMToMeChatMessage extends ChatMessageWithSender implements IChatMes
     @AutoService(Provider.class)
     public static class ProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return message -> {
-                final List<Text> siblings = message.getSiblings();
+                final List<Component> siblings = message.getSiblings();
                 return siblings.size() == 3 &&
                     siblings.get(0).getString().equals("*") &&
                     siblings.get(1).getString().equals("] ") &&
@@ -60,7 +58,7 @@ public class PMToMeChatMessage extends ChatMessageWithSender implements IChatMes
             };
         }
         @Override
-        public Function<Text, ChatMessage> creator() {
+        public Function<Component, ChatMessage> creator() {
             return PMToMeChatMessage::new;
         }
     }
@@ -72,21 +70,21 @@ public class PMToMeChatMessage extends ChatMessageWithSender implements IChatMes
     }
 
     @Override
-    public Text removeStyle(Text message) {
+    public Component removeStyle(Component message) {
         if (message.getString().startsWith("[*] [я -> "))
             return message; // pohuy
 
-        List<Text> siblings = message.getSiblings();
-        final MutableText newText = Text.empty();
+        List<Component> siblings = message.getSiblings();
+        final MutableComponent newText = Component.empty();
 
-        newText.append(message.copyContentOnly());
+        newText.append(message.plainCopy());
         newText.append(siblings.get(0));
         newText.append(siblings.get(1));
         
-        Text part = siblings.get(2);
-        newText.append(part.copyContentOnly());
+        Component part = siblings.get(2);
+        newText.append(part.plainCopy());
         part = part.getSiblings().get(0);
-        newText.append(part.copyContentOnly());
+        newText.append(part.plainCopy());
 
         siblings = part.getSiblings();
         for (int i = 0; i < siblings.size(); ++i) {
@@ -94,19 +92,19 @@ public class PMToMeChatMessage extends ChatMessageWithSender implements IChatMes
                 newText.append(siblings.get(i));
             else {
                 part = part.getSiblings().get(i);
-                newText.append(part.copyContentOnly());
+                newText.append(part.plainCopy());
                 part = part.getSiblings().get(0);
-                newText.append(part.copyContentOnly());
+                newText.append(part.plainCopy());
                 part = part.getSiblings().get(0);
-                newText.append(part.copyContentOnly());
-                for (final Text text : part.getSiblings())
+                newText.append(part.plainCopy());
+                for (final Component text : part.getSiblings())
                     newText.append(text.getString());
             }
         }
 
         final Style senderStyle = Style.EMPTY
             .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы написать §f§n" + getSenderNick())));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы написать §f§n" + getSenderNick())));
             
         newText.setStyle(senderStyle);
         

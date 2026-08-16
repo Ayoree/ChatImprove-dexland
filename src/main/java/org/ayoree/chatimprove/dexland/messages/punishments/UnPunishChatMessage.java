@@ -19,10 +19,10 @@
 
 package org.ayoree.chatimprove.dexland.messages.punishments;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 public abstract class UnPunishChatMessage extends AnyPunishChatMessage {    
-    protected UnPunishChatMessage(Text message) {
+    protected UnPunishChatMessage(Component message) {
         super(message);
     }
 }

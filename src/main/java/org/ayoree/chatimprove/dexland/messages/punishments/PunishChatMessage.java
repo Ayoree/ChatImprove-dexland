@@ -19,7 +19,7 @@
 
 package org.ayoree.chatimprove.dexland.messages.punishments;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 public abstract class PunishChatMessage extends AnyPunishChatMessage {
     protected String m_reason = null;
@@ -27,7 +27,7 @@ public abstract class PunishChatMessage extends AnyPunishChatMessage {
     // This is used only for setting the reason to Ban/Mute/Warn chat messages
     protected static PunishChatMessage LAST_MSG = null;
 
-    protected PunishChatMessage(Text message) {
+    protected PunishChatMessage(Component message) {
         super(message);
         LAST_MSG = this;
     }

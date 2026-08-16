@@ -22,30 +22,28 @@ package org.ayoree.chatimprove.dexland.messages.punishments.lists;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.Config;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprover.api.ChatMessage;
 
 import com.google.auto.service.AutoService;
 
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
 public class MutelistChatMessage extends PunishlistChatMessage {
-    public MutelistChatMessage(Text message) {
+    public MutelistChatMessage(Component message) {
         super(message);
     }
 
     @AutoService(Provider.class)
     public static class ProviderImpl extends AddonInformerImpl implements Provider {
         @Override
-        public Predicate<Text> validator() {
+        public Predicate<Component> validator() {
             return message -> {
-                final List<Text> siblings = message.getSiblings();
+                final List<Component> siblings = message.getSiblings();
                 return (
                     siblings.size() >= 15 &&
                     siblings.get(0).getString().equals("- ") &&
@@ -57,7 +55,7 @@ public class MutelistChatMessage extends PunishlistChatMessage {
             };
         }
         @Override
-        public Function<Text, ChatMessage> creator() {
+        public Function<Component, ChatMessage> creator() {
             return MutelistChatMessage::new;
         }
     }
@@ -72,14 +70,14 @@ public class MutelistChatMessage extends PunishlistChatMessage {
             unmuteStr = unmuteStr.concat(" server:" + m_server);
         }
 
-        MutableText newMsg = m_message.copy();
-        final List<Text> siblings = newMsg.getSiblings();
+        MutableComponent newMsg = m_message.copy();
+        final List<Component> siblings = newMsg.getSiblings();
         final Style senderStyle = siblings.get(s_senderIndex).getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand(banStr))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of(banStr.replace('&', '§'))));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty(banStr.replace('&', '§'))));
         final Style receiverStyle = siblings.get(s_receiverIndex).getStyle()
             .withClickEvent(new ClickEvent.SuggestCommand(unmuteStr))
-            .withHoverEvent(new HoverEvent.ShowText(Text.of("§7Нажмите чтобы размутить §f§n" + getReceiverNick())));
+            .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы размутить §f§n" + getReceiverNick())));
         
         siblings.set(s_receiverIndex, siblings.get(s_receiverIndex).copy().setStyle(receiverStyle));
         siblings.set(s_senderIndex, siblings.get(s_senderIndex).copy().setStyle(senderStyle));

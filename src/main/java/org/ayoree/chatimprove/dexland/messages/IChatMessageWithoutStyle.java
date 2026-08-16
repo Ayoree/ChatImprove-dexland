@@ -19,8 +19,8 @@
 
 package org.ayoree.chatimprove.dexland.messages;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 public abstract interface IChatMessageWithoutStyle {
-    public Text removeStyle(Text message);
+    public Component removeStyle(Component message);
 }
