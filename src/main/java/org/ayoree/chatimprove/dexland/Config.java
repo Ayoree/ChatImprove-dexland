@@ -151,13 +151,15 @@ public class Config {
     }
 
     public static Config getInst() {
-        if (instance == null) {
-            if (HANDLER.load())
-                instance = HANDLER.instance();
-            else
-                LOGGER.error("Failed to load config");
-        }
         return instance;
+    }
+
+    public static void init() {
+        if (HANDLER.load())
+            instance = HANDLER.instance();
+        else {
+            LOGGER.error("Failed to load config");
+        }
     }
 
     /**

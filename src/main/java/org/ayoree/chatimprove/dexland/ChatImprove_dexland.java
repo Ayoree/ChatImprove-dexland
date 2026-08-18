@@ -33,6 +33,8 @@ public class ChatImprove_dexland implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		Config.init();
+		RealnameReceiver.init();
 		LOGGER.info("%s initialized".formatted(MOD_ID));
 	}
 }

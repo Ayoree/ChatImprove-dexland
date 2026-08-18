@@ -27,6 +27,7 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
+import org.ayoree.chatimprove.dexland.RealnameReceiver;
 import org.ayoree.chatimprover.api.ChatMessage;
 import org.ayoree.chatimprover.api.ChatMessageWithReceiverAndSender;
 
@@ -44,6 +45,10 @@ public class PMChatMessage extends ChatMessageWithReceiverAndSender {
         int receiverStartIndex = startNickIndex + (getSenderNick().length()) + 4;
         setReceiverNick(getMessageStr().substring(receiverStartIndex, getMessageStr().indexOf("] ", receiverStartIndex)));
         m_textPart = Component.nullToEmpty(m_message.getString().substring(receiverStartIndex + getReceiverNick().length() + 2));
+
+        if (getSenderNick().startsWith("~~")) {
+            setSenderNick(RealnameReceiver.getInst().getRealName(getSenderNick()));
+        }
     }
 
     @AutoService(Provider.class)
