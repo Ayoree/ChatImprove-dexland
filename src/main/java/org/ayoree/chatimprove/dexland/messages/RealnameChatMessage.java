@@ -37,12 +37,11 @@ public class RealnameChatMessage extends ChatMessageWithReceiverAndSender {
         super(message);
 
         Component usefulPart = message.getSiblings().get(2);
-        final String lastPart = usefulPart.getSiblings().getLast().getString();
-        
+
         final String fullPart = usefulPart.getString();
-        final String changedNick = fullPart.substring(0, fullPart.length() - lastPart.length());
+        final String changedNick = fullPart.substring(0, fullPart.indexOf(' '));
         setChangedNick(changedNick);
-        setRealNick(lastPart.substring(lastPart.lastIndexOf(" ") + 1));
+        setRealNick(fullPart.substring(fullPart.lastIndexOf(' ') + 1));
 
         RealnameReceiver.getInst().addPair(getChangedNickname(), getRealNickname());
     }
@@ -57,8 +56,11 @@ public class RealnameChatMessage extends ChatMessageWithReceiverAndSender {
                     return false;
 
                 final Component mainPart = siblings.get(2);
-                return mainPart.plainCopy().getString().equals("~~") &&
-                       mainPart.getSiblings().getLast().getString().startsWith(" является ");
+                return  mainPart.getString().startsWith("~~") &&
+                        (
+                            mainPart.getSiblings().isEmpty() ||
+                            mainPart.getSiblings().getLast().getString().contains(" является ")
+                        );
             };
         }
         @Override

@@ -1,9 +1,28 @@
+/*
+ * ChatImprove-dexland, a Minecraft mod-addon for <https://github.com/Ayoree/ChatImprover>
+ * Copyright (C) Ayoree <https://github.com/Ayoree>
+ * Copyright (C) ChatImprove-dexland contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.ayoree.chatimprove.dexland;
+
+import static org.ayoree.chatimprover.ChatImprover.LOGGER;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.ayoree.chatimprove.dexland.messages.RealnameChatMessage;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -28,11 +47,9 @@ public class RealnameReceiver {
         return isReadingNicknames;
     }
 
-    public void receivedRealnameMessage(RealnameChatMessage message) {
+    public void receivedRealnameMessage() {
         if (isCommandSend && !isReadingNicknames) {
             isReadingNicknames = true;
-
-            // TODO: Complete logic
         }
     }
 
@@ -44,20 +61,24 @@ public class RealnameReceiver {
     }
 
     public String getRealName(String changedNickname) {
+        LOGGER.info("getRealName: %s".formatted(changedNickname));
         if (nicknames.containsKey(changedNickname)) {
             return nicknames.get(changedNickname);
         }
 
-        sendCommand(Minecraft.getInstance().getConnection());
+        requestRealnames(Minecraft.getInstance().getConnection());
         return changedNickname;
     }
 
     public void addPair(String changedNickname, String realNickname) {
         nicknames.put(changedNickname, realNickname);
+        LOGGER.info("AddPair: `%s`, `%s`".formatted(changedNickname, realNickname));
     }
     
-    private void sendCommand(ClientPacketListener clientPacketListener) {
+    private void requestRealnames(ClientPacketListener clientPacketListener) {
+        LOGGER.info("requestRealnames");
         if (!isCommandSend) {
+            LOGGER.info("sendCommand(\"realname ~\");");
             clientPacketListener.sendCommand("realname ~");
             isCommandSend = true;
         }

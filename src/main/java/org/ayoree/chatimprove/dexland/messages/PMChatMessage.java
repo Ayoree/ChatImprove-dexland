@@ -49,6 +49,10 @@ public class PMChatMessage extends ChatMessageWithReceiverAndSender {
         if (getSenderNick().startsWith("~~")) {
             setSenderNick(RealnameReceiver.getInst().getRealName(getSenderNick()));
         }
+
+        if (getReceiverNick().startsWith("~~")) {
+            setReceiverNick(RealnameReceiver.getInst().getRealName(getReceiverNick()));
+        }
     }
 
     @AutoService(Provider.class)
@@ -69,10 +73,10 @@ public class PMChatMessage extends ChatMessageWithReceiverAndSender {
     public ChatMessage generateChangedMsg() {
         MutableComponent newMsg = Component.empty();
         final Style senderStyle = Style.EMPTY
-            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick()))
+            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getSenderNick() + " "))
             .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы написать §f§n" + getSenderNick())));
         final Style receiverStyle = Style.EMPTY
-            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getReceiverNick()))
+            .withClickEvent(new ClickEvent.SuggestCommand("/m " + getReceiverNick() + " "))
             .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("§7Нажмите чтобы написать §f§n" + getReceiverNick())));
         newMsg.append(Component.nullToEmpty("§7[SS] §f[").copy().setStyle(Style.EMPTY));
         newMsg.append(Component.nullToEmpty("§a" + getSenderNick()).copy().setStyle(senderStyle));

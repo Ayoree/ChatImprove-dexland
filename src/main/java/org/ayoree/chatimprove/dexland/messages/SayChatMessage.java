@@ -31,6 +31,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprove.dexland.Config;
+import org.ayoree.chatimprove.dexland.RealnameReceiver;
 import org.ayoree.chatimprover.api.ChatMessage;
 import org.ayoree.chatimprover.api.ChatMessageWithSender;
 
@@ -43,6 +44,9 @@ public class SayChatMessage extends ChatMessageWithSender implements IChatMessag
         super(message);
         final String msgStr = m_message.getString();
         setSenderNick(msgStr.substring(1, msgStr.indexOf("] ")));
+
+        if (getSenderNick().startsWith("~~"))
+            setSenderNick(RealnameReceiver.getInst().getRealName(getSenderNick()));
     }
 
     @AutoService(Provider.class)
