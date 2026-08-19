@@ -82,6 +82,7 @@ public class MeChatMessage extends ChatMessageWithSender implements IChatMessage
         return this;
     }
 
+    @SuppressWarnings("null")
     @Override
     public Component removeStyle(Component message) {
         List<Component> siblings = message.getSiblings();

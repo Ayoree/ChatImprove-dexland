@@ -57,6 +57,7 @@ public class UnjaillistChatMessage extends UnPunishlistChatMessage {
         }
     }
 
+    @SuppressWarnings("null")
     @Override
     public ChatMessage generateChangedMsg() {
         String banStr = Config.getInst().incorrectUnjailMsg;

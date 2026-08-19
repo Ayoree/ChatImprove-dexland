@@ -60,6 +60,7 @@ public class BanlistChatMessage extends PunishlistChatMessage {
         }
     }
 
+    @SuppressWarnings("null")
     @Override
     public ChatMessage generateChangedMsg() {
         String banStr = Config.getInst().incorrectBanMsg;

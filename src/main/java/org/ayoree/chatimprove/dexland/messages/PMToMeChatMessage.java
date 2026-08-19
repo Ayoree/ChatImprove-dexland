@@ -69,6 +69,7 @@ public class PMToMeChatMessage extends ChatMessageWithSender implements IChatMes
         return this;
     }
 
+    @SuppressWarnings("null")
     @Override
     public Component removeStyle(Component message) {
         if (message.getString().startsWith("[*] [я -> "))

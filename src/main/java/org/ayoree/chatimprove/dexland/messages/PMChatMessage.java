@@ -69,6 +69,7 @@ public class PMChatMessage extends ChatMessageWithReceiverAndSender {
         }
     }
 
+    @SuppressWarnings("null")
     @Override
     public ChatMessage generateChangedMsg() {
         MutableComponent newMsg = Component.empty();

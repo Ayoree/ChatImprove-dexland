@@ -80,6 +80,7 @@ public class BroadcastChatMessage extends ChatMessageWithSender implements IChat
         return this;
     }
 
+    @SuppressWarnings("null")
     @Override
     public Component removeStyle(Component message) {
         final List<Component> siblings = message.getSiblings();

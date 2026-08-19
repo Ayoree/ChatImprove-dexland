@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 
 import org.ayoree.chatimprove.dexland.AddonInformerImpl;
 import org.ayoree.chatimprove.dexland.RealnameReceiver;

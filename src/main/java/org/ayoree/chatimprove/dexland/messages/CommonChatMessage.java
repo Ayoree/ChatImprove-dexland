@@ -39,6 +39,7 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
     protected final String m_textPart;
     private final boolean m_isGlobal;
 
+    @SuppressWarnings("null")
     public CommonChatMessage(Component message) {
         super(message);
         
@@ -68,6 +69,7 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
         }
     }
 
+    @SuppressWarnings("null")
     @Override
     public ChatMessage generateChangedMsg() {
         m_changedMsg = Config.getInst().isRemoveColors ? removeStyle(getOrigMessage()) : getOrigMessage();
@@ -99,12 +101,14 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
         final HoverEvent hEvent = m_message.getSiblings().getFirst().getStyle().getHoverEvent();
         assert hEvent != null && hEvent.action() == HoverEvent.Action.SHOW_TEXT;
         final HoverEvent.ShowText showText = (HoverEvent.ShowText) hEvent;
+        @SuppressWarnings("null")
         final Component hText = showText.value();
         final String text = hText.getString();
         final String first = text.split("\\s+", 2)[0];
         return Component.nullToEmpty(first).copy().setStyle(hText.getStyle());
     }
 
+    @SuppressWarnings("null")
     private Component buildHoverText() {
         final HoverEvent hEvent = m_message.getSiblings().getFirst().getStyle().getHoverEvent();
         assert hEvent.action() == HoverEvent.Action.SHOW_TEXT;
@@ -119,6 +123,7 @@ public class CommonChatMessage extends ChatMessageWithSender implements IChatMes
         return m_message.getSiblings().getFirst().getStyle().getClickEvent();
     }
 
+    @SuppressWarnings("null")
     @Override
     public Component removeStyle(Component message) {
         List<Component> siblings = message.getSiblings();
