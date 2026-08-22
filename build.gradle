@@ -43,8 +43,12 @@ dependencies {
 	// Fabric API
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-	// Chat improver (published to maven local)
+	// Chat improver
 	implementation "org.ayoree:chatimprover:${chat_improver_version}"
+
+	// OWO Lib
+	implementation "io.wispforest:owo-lib:${project.owo_version}"
+	annotationProcessor "io.wispforest:owo-lib:${project.owo_version}"
 
 	// Modmenu
 	implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
