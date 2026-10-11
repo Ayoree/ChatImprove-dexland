@@ -24,18 +24,19 @@ import java.util.function.Predicate;
 import org.ayoree.chatimprove.dexland.messages.RealnameChatMessage;
 
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.fabricmc.fabric.api.event.Event;
 import net.minecraft.network.chat.Component;
 import org.ayoree.chatimprover.api.ChatImproverApi;
 
 public class RealnameHandler {
-    
+
     public static void init() {
-        ClientReceiveMessageEvents.ALLOW_GAME.addPhaseOrdering(ChatImproverApi.ADDON_PHASE, Event.DEFAULT_PHASE);
-        ClientReceiveMessageEvents.ALLOW_GAME.register(RealnameHandler::onAllowMessage);
+        ClientReceiveMessageEvents.ALLOW_GAME.register(ChatImproverApi.ADDON_PHASE, RealnameHandler::onAllowMessage);
     }
-    
+
      private static boolean onAllowMessage(final Component message, final boolean isOverlay) {
+        if (isOverlay)
+            return true;
+
         final Predicate<Component> realNameValidator = new RealnameChatMessage.ProviderImpl().validator();
         if (realNameValidator.test(message))
             RealnameReceiver.getInst().receivedRealnameMessage();
