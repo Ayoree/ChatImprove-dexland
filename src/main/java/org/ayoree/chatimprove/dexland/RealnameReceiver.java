@@ -19,7 +19,7 @@
 
 package org.ayoree.chatimprove.dexland;
 
-import static org.ayoree.chatimprover.ChatImprover.LOGGER;
+import static org.ayoree.chatimprove.dexland.ChatImprove_dexland.LOGGER;
 
 import java.util.HashMap;
 import java.util.Map;
