@@ -95,8 +95,15 @@ public class FilterImpl extends Filter {
                 return (siblings.size() == 6 &&
                     siblings.get(0).getString().equals("| ") &&
                     siblings.get(1).getString().equals("Игрок ") &&
-                    siblings.get(3).getString().equals(" выбил ") &&
+                    siblings.get(3).getString().equals("выбил ") &&
                     siblings.get(5).getString().equals("из ежедневного кейса на /warp case")
+                ) || (
+                    siblings.size() == 7 &&
+                    siblings.get(0).getString().equals("| ") &&
+                    siblings.get(1).getString().equals("Игрок ") &&
+                    siblings.get(3).getString().equals("сорвал ") &&
+                    siblings.get(4).getString().equals("ДЖЕКПОТ ЕЖЕДНЕВНОГО КЕЙСА") &&
+                    siblings.get(6).getString().equals("Открыть кейс: /warp case")
                 );
             };
         }
@@ -212,19 +219,13 @@ public class FilterImpl extends Filter {
                 if (!Config.getInst().isBlockSpleefMessages)
                     return false;
                 List<Component> siblings = text.getSiblings();
-                return (siblings.size() == 6 &&
-                    siblings.get(0).getString().equals("Spleef ") &&
-                    siblings.get(1).getString().equals("▸ ") &&
-                    siblings.get(2).getString().equals("Победитель: ") &&
-                    siblings.get(4).getString().equals("! ") &&
-                    siblings.get(5).getString().equals("Хочешь тоже развлекаться? Пиши: /spleef join")
-                ) || (
-                    siblings.size() == 4 &&
-                    siblings.get(0).getString().equals("Spleef ") &&
-                    siblings.get(1).getString().equals("▸ ") &&
-                    siblings.get(2).getString().equals("Ничья! ") &&
-                    siblings.get(3).getString().equals("Время игры вышло.")
-                );
+                return (siblings.size() == 7 &&
+                    siblings.get(0).getString().equals("Spleef") &&
+                    siblings.get(2).getString().equals("▸") &&
+                    siblings.get(4).getString().startsWith("Победитель: ") &&
+                    siblings.get(6).getString().equals("Хочешь тоже развлекаться? Пиши: /spleef join")
+                ) ||
+                    text.getString().equals("Spleef ▸ Ничья! Время игры вышло.");
             };
         }
     }
